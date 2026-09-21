@@ -1,0 +1,117 @@
+{
+  "forecast_metrics": {
+    "persistence": {
+      "mae": 34.71335195530726,
+      "rmse": 56.25800562770337
+    },
+    "hour_of_week": {
+      "mae": 40.33663700381287,
+      "rmse": 67.29003427398544
+    },
+    "p50": {
+      "mae": 29.057421991297733,
+      "rmse": 55.610390561476784
+    },
+    "quantiles": {
+      "p10_pinball": 7.303710157816255,
+      "p50_pinball": 14.528710995648867,
+      "p90_pinball": 10.199123395310995,
+      "coverage": 0.5335195530726257,
+      "mean_width": 54.859132835507175
+    }
+  },
+  "strategy_metrics": {
+    "hour_of_week": {
+      "gross_revenue_eur": 1547.4124348132873,
+      "net_revenue_eur": 785.1598040154771,
+      "degradation_cost_eur": 762.2526307978098,
+      "throughput_mwh": 152.45052615956195,
+      "equivalent_cycles": 38.11263153989049,
+      "max_drawdown_eur": -288.9014700129113,
+      "revenue_volatility_eur": 54.336332675796996,
+      "cvar_loss_eur": 115.02698421110158,
+      "regret_vs_perfect_eur": 2622.224654599414,
+      "revenue_per_mw_eur": 785.1598040154771,
+      "revenue_per_mwh_capacity_eur": 392.57990200773855
+    },
+    "ml_p50": {
+      "gross_revenue_eur": 2812.6862116135517,
+      "net_revenue_eur": 2209.590713451652,
+      "degradation_cost_eur": 603.0954981618997,
+      "throughput_mwh": 120.61909963237996,
+      "equivalent_cycles": 30.15477490809499,
+      "max_drawdown_eur": -218.97258069618397,
+      "revenue_volatility_eur": 54.23745516422992,
+      "cvar_loss_eur": 104.79717680017386,
+      "regret_vs_perfect_eur": 1197.7937451632392,
+      "revenue_per_mw_eur": 2209.590713451652,
+      "revenue_per_mwh_capacity_eur": 1104.795356725826
+    },
+    "perfect_foresight": {
+      "gross_revenue_eur": 4048.9385425008672,
+      "net_revenue_eur": 3407.384458614891,
+      "degradation_cost_eur": 641.5540838859758,
+      "throughput_mwh": 128.31081677719519,
+      "equivalent_cycles": 32.077704194298796,
+      "max_drawdown_eur": -239.68976004800766,
+      "revenue_volatility_eur": 57.51588033516885,
+      "cvar_loss_eur": 98.30669813709147,
+      "regret_vs_perfect_eur": 0.0,
+      "revenue_per_mw_eur": 3407.384458614891,
+      "revenue_per_mwh_capacity_eur": 1703.6922293074456
+    },
+    "persistence": {
+      "gross_revenue_eur": 2975.70940364317,
+      "net_revenue_eur": 2316.737591566202,
+      "degradation_cost_eur": 658.971812076968,
+      "throughput_mwh": 131.7943624153936,
+      "equivalent_cycles": 32.9485906038484,
+      "max_drawdown_eur": -245.008039312645,
+      "revenue_volatility_eur": 57.640133378630836,
+      "cvar_loss_eur": 106.51467272150472,
+      "regret_vs_perfect_eur": 1090.6468670486893,
+      "revenue_per_mw_eur": 2316.737591566202,
+      "revenue_per_mwh_capacity_eur": 1158.368795783101
+    },
+    "quantile_robust": {
+      "gross_revenue_eur": 2784.6883764966237,
+      "net_revenue_eur": 2340.1304125984825,
+      "degradation_cost_eur": 444.55796389814054,
+      "throughput_mwh": 88.91159277962811,
+      "equivalent_cycles": 22.227898194907027,
+      "max_drawdown_eur": -205.7056252214012,
+      "revenue_volatility_eur": 49.75376157855622,
+      "cvar_loss_eur": 94.2079740951694,
+      "regret_vs_perfect_eur": 1067.2540460164087,
+      "revenue_per_mw_eur": 2340.1304125984825,
+      "revenue_per_mwh_capacity_eur": 1170.0652062992413
+    }
+  },
+  "mae_revenue_spearman": {
+    "rho": 0.6,
+    "p_value": 0.28475697986529375,
+    "n_weeks": 5
+  },
+  "experiment": {
+    "test_start": "2024-11-01 00:00:00+00:00",
+    "test_end_exclusive": "2024-12-01 00:00:00+00:00",
+    "complete_dispatch_days": 27,
+    "battery": {
+      "power_mw": 1.0,
+      "energy_mwh": 2.0,
+      "min_soc_fraction": 0.1,
+      "max_soc_fraction": 0.9,
+      "initial_soc_fraction": 0.5,
+      "charge_efficiency": 0.95,
+      "discharge_efficiency": 0.95,
+      "degradation_cost_eur_per_mwh": 5.0,
+      "max_equivalent_cycles_per_day": 1.5
+    },
+    "inputs": {
+      "data\\raw\\entsoe_prices_2023.parquet": "6b5b67a06e642e8d9ee194d679f8b960639be13c8cc08263704a8094680e6734",
+      "data\\raw\\entsoe_prices_2024.parquet": "a15fa67a515d6893e4fe3a074340fe869485221f1b5477ef3503d08b0a9483ce"
+    },
+    "seed": 42,
+    "note": "Historical simulation; energy-only; not live or commercial trading."
+  }
+}

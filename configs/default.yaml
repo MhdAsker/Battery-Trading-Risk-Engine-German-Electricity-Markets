@@ -1,0 +1,25 @@
+seed: 42
+timezone: Europe/Berlin
+data:
+  bidding_zone: 10Y1001A1001A82H
+  frequency: 1h
+  raw_dir: data/raw
+  processed_dir: data/processed
+battery:
+  power_mw: 1.0
+  energy_mwh: 2.0
+  min_soc_fraction: 0.10
+  max_soc_fraction: 0.90
+  initial_soc_fraction: 0.50
+  charge_efficiency: 0.95
+  discharge_efficiency: 0.95
+  degradation_cost_eur_per_mwh: 5.0
+  max_equivalent_cycles_per_day: 1.5
+optimization:
+  risk_aversion: 0.35
+  terminal_soc_fraction: 0.50
+  solver: CLARABEL
+forecasting:
+  train_days: 365
+  retrain_days: 7
+  quantiles: [0.1, 0.5, 0.9]
