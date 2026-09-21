@@ -10,6 +10,8 @@ claim live trading performance or fabricate balancing-market data.
 ![Tests](https://img.shields.io/badge/tests-11%20passing-success)
 ![Market](https://img.shields.io/badge/market-DE--LU%20day--ahead-orange)
 
+![Net battery-trading revenue by strategy](docs/assets/strategy_net_revenue.png)
+
 ## Problem and research questions
 
 Battery value depends less on predicting every price precisely than on identifying the
@@ -57,6 +59,11 @@ The published benchmark refits the quantile GBM every seven days using a trailin
 and causal rolling price statistics. It does not use realized load, renewable
 generation, or any future price.
 
+![Out-of-sample forecast accuracy](docs/assets/forecast_accuracy.png)
+
+The P50 gradient-boosting model improves both MAE and RMSE over the simple baselines,
+but forecast accuracy alone does not determine battery revenue.
+
 ## Battery model and optimization
 
 The default simulated battery is 1 MW / 2 MWh with 10–90% SOC, 95% one-way efficiency,
@@ -86,6 +93,12 @@ The P10–P90 interval covered 53.4% of realized prices with a mean width of
 €54.86/MWh. This is below the nominal 80% target, so the quantiles are not presented as
 well calibrated.
 
+![Forecast uncertainty and realized price](docs/assets/forecast_uncertainty_day.png)
+
+The highest-spread test day illustrates an economically important failure mode: the
+model recognized an afternoon price increase, but materially underestimated its size
+and the realized price moved outside P90.
+
 | Strategy | Net revenue (€) | Throughput (MWh) | Max drawdown (€) | Tail loss / CVaR (€) | Regret (€) |
 |---|---:|---:|---:|---:|---:|
 | Perfect foresight upper bound | 3,407 | 128.31 | -239.69 | 98.31 | 0 |
@@ -100,6 +113,22 @@ using 26.3% less throughput and reducing the reported tail loss by 10.1%. The we
 MAE–revenue Spearman estimate was 0.60, but with only five weeks (`p=0.285`) it is not
 statistically conclusive. These are descriptive findings for one short historical
 window, not expected annual returns.
+
+![Risk and return comparison](docs/assets/risk_return.png)
+
+The robust policy occupies the preferred upper-left region: higher revenue and lower
+tail loss than the other implementable strategies. Bubble size represents throughput,
+which also makes the reduction in battery use visible.
+
+![Cumulative realized net revenue](docs/assets/cumulative_net_revenue.png)
+
+### Battery operation
+
+The optimizer respects grid-side power, SOC, efficiency, cycling, and terminal-energy
+constraints. On the highest-spread test day it charges before the expected peak,
+discharges into the peak, and restores terminal SOC near the end of the horizon.
+
+![Battery dispatch and state of charge](docs/assets/battery_dispatch_day.png)
 
 Machine-readable forecasts, dispatch, metrics, input hashes, and a full discussion are
 in [`results/energy_benchmark_2024`](results/energy_benchmark_2024). The experiment
@@ -123,10 +152,11 @@ contract are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Reproduce
 
 ```bash
-python -m pip install -e ".[dev,dashboard]"
+python -m pip install -e ".[dev,dashboard,visualization]"
 pytest
 ruff check .
 python experiments/run_energy_benchmark.py data/raw/entsoe_prices_2023.parquet data/raw/entsoe_prices_2024.parquet
+python experiments/create_readme_figures.py
 streamlit run dashboard/app.py
 ```
 

@@ -16,6 +16,8 @@ simulated 1 MW / 2 MWh battery over 27 complete UTC delivery days between 1 and
 
 ## Main results
 
+![Strategy net revenue](../../docs/assets/strategy_net_revenue.png)
+
 | Strategy | Net revenue (€) | Gross revenue (€) | Throughput (MWh) | Equivalent cycles | Regret (€) |
 |---|---:|---:|---:|---:|---:|
 | Perfect foresight | 3,407.38 | 4,048.94 | 128.31 | 32.08 | 0.00 |
@@ -34,6 +36,12 @@ P10–P90 coverage was only 53.4%, well below its nominal 80%, indicating that t
 interval was too narrow or otherwise miscalibrated. The robust-policy improvement is
 therefore promising but not proof that probabilistic forecasting generalizes.
 
+![Forecast accuracy](../../docs/assets/forecast_accuracy.png)
+
+![Risk and return](../../docs/assets/risk_return.png)
+
+![Cumulative realized net revenue](../../docs/assets/cumulative_net_revenue.png)
+
 ## Files
 
 - `metrics.json`: complete forecast, strategy, risk, configuration, and provenance data.
@@ -43,4 +51,3 @@ therefore promising but not proof that probabilistic forecasting generalizes.
 
 The evaluation window is short and selected for the first reproducible milestone.
 Results must not be annualized or interpreted as commercial returns.
-

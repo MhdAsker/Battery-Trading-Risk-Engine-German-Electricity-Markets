@@ -24,6 +24,7 @@ dependencies = [
 [project.optional-dependencies]
 models = ["lightgbm>=4.3,<5", "xgboost>=2.0,<3"]
 dashboard = ["plotly>=5.20,<7", "streamlit>=1.32,<2"]
+visualization = ["matplotlib>=3.8,<4"]
 dev = ["pytest>=8,<9", "pytest-cov>=5,<7", "ruff>=0.4,<1", "mypy>=1.9,<2"]
 
 [project.scripts]
