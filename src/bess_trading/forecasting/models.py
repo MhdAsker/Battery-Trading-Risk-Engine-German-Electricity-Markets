@@ -84,3 +84,57 @@ class QuantileGBM:
         # Independent quantile models can cross; sorting is transparent and stable.
         output.iloc[:, :] = np.sort(output.to_numpy(), axis=1)
         return output
+
+
+@dataclass
+class LightGBMForecaster:
+    """Optional LightGBM adapter with a stable pandas interface."""
+
+    objective: str = "regression_l1"
+    random_state: int = 42
+    params: dict[str, object] = field(default_factory=dict)
+    model: object = field(init=False)
+
+    def __post_init__(self) -> None:
+        try:
+            from lightgbm import LGBMRegressor
+        except ImportError as exc:  # pragma: no cover - depends on optional extra
+            raise ImportError("Install german-bess-trading[models] for LightGBM") from exc
+        self.model = LGBMRegressor(
+            objective=self.objective, random_state=self.random_state, verbosity=-1, **self.params
+        )
+
+    def fit(self, x: pd.DataFrame, y: pd.Series) -> LightGBMForecaster:
+        self.model.fit(x, y)
+        return self
+
+    def predict(self, x: pd.DataFrame) -> pd.Series:
+        return pd.Series(self.model.predict(x), index=x.index, name="lightgbm")
+
+
+@dataclass
+class XGBoostForecaster:
+    """Optional XGBoost adapter with deterministic CPU defaults."""
+
+    random_state: int = 42
+    params: dict[str, object] = field(default_factory=dict)
+    model: object = field(init=False)
+
+    def __post_init__(self) -> None:
+        try:
+            from xgboost import XGBRegressor
+        except ImportError as exc:  # pragma: no cover - depends on optional extra
+            raise ImportError("Install german-bess-trading[models] for XGBoost") from exc
+        self.model = XGBRegressor(
+            objective="reg:absoluteerror",
+            random_state=self.random_state,
+            n_jobs=1,
+            **self.params,
+        )
+
+    def fit(self, x: pd.DataFrame, y: pd.Series) -> XGBoostForecaster:
+        self.model.fit(x, y)
+        return self
+
+    def predict(self, x: pd.DataFrame) -> pd.Series:
+        return pd.Series(self.model.predict(x), index=x.index, name="xgboost")

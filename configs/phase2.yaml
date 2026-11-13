@@ -1,0 +1,42 @@
+seed: 42
+
+experiment:
+  inputs:
+    - data/raw/entsoe_prices_20200101_20210101.parquet
+    - data/raw/entsoe_prices_20210101_20220101.parquet
+    - data/raw/entsoe_prices_20220101_20230101.parquet
+    - data/raw/entsoe_prices_2023.parquet
+    - data/raw/entsoe_prices_2024.parquet
+  calibration_start: "2023-07-01T00:00:00Z"
+  test_start: "2024-01-01T00:00:00Z"
+  test_end: "2025-01-01T00:00:00Z"
+  output: results/phase2_2024
+  bootstrap_samples: 2000
+
+battery:
+  power_mw: 1.0
+  energy_mwh: 2.0
+  min_soc_fraction: 0.10
+  max_soc_fraction: 0.90
+  initial_soc_fraction: 0.50
+  charge_efficiency: 0.95
+  discharge_efficiency: 0.95
+  degradation_cost_eur_per_mwh: 5.0
+  max_equivalent_cycles_per_day: 1.5
+
+forecasting:
+  train_days: 365
+  retrain_days: 7
+  issue_hour_local: 11
+  model_max_iter: 100
+
+probabilistic:
+  interval_alpha: 0.20
+  scenario_count: 100
+  block_hours: 24
+
+optimization:
+  risk_aversion: 0.20
+  cvar_alpha: 0.95
+  frontier_risk_aversions: [0.0, 0.05, 0.10, 0.20, 0.50, 1.0]
+  solver: HIGHS

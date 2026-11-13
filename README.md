@@ -13,7 +13,7 @@ claim live trading performance or fabricate balancing-market data.
 > are generated in `results/phase1_2024`.
 
 ![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB)
-![Tests](https://img.shields.io/badge/tests-27%20passing-success)
+![Tests](https://img.shields.io/badge/tests-36%20passing-success)
 ![Market](https://img.shields.io/badge/market-DE--LU%20day--ahead-orange)
 
 ![Net battery-trading revenue by strategy](docs/assets/strategy_net_revenue.png)
@@ -49,6 +49,8 @@ python -m pip install -e ".[dev,dashboard,models]"
 bess-research fetch-prices --start 2024-01-01 --end 2025-01-01
 # Or acquire a 3–5 year research history in API-safe annual chunks:
 bess-research fetch-history --start 2020-01-01 --end 2025-01-01
+# Archived forecast-time fundamentals for Phase 2:
+bess-research fetch-fundamentals --start 2023-01-01 --end 2025-01-01
 ```
 
 The CLI reads `ENTSOE_API_TOKEN` from the environment; it does not automatically parse
@@ -85,6 +87,14 @@ Phase 1 explicitly includes the market time unit in SOC, settlement, throughput,
 degradation equations. A binary operating mode prevents simultaneous charge/discharge,
 SOC carries across 23/24/25-hour German delivery days, and a configurable terminal
 energy value replaces forced daily SOC resets.
+
+Phase 2 adds a non-anticipative stochastic mixed-integer program. It maximizes expected
+scenario revenue minus an explicit CVaR loss penalty; all scenarios share one physical
+schedule. Circular residual blocks retain multi-hour dependence, and diagnostics compare
+lag-one correlation and tail frequency against observations. Split-conformal calibration,
+WIS, empirical CRPS, PIT, regime coverage, efficient frontiers, degradation sensitivities,
+and paired block-bootstrap effect sizes are implemented in the configured research pipeline.
+See [the Phase 2 protocol](docs/PHASE2_IMPLEMENTATION.md).
 
 ## Published benchmark results
 
@@ -151,6 +161,37 @@ in [`results/phase1_2024`](results/phase1_2024). The legacy pilot remains in
 design and future regime analyses are specified in
 [docs/EXPERIMENT_DESIGN.md](docs/EXPERIMENT_DESIGN.md).
 
+## Phase 2 probabilistic-value result
+
+The leakage-safe Phase 2 replay uses July–December 2023 for calibration and scenario
+residuals, then evaluates 326 complete German delivery days in 2024. Split conformalization
+adds EUR 6.30/MWh to each interval bound and raises overall P10–P90 coverage to **80.43%**,
+close to the nominal 80% target. WIS is 15.28, empirical CRPS is 17.01, and mean PIT is 0.480.
+
+Calibration is not uniform: coverage falls to 52.3% during negative prices, 39.7% for price
+spikes, and 76.2% in high-volatility intervals. Scenario validation is materially stronger:
+lag-one correlation differs from observations by 0.038 and tail-event frequency by 2.53
+percentage points.
+
+![Phase 2 conditional coverage](docs/assets/phase2_regime_coverage.png)
+
+The central research result is negative. At lambda=0.20 and 95% CVaR, stochastic dispatch
+earned **EUR 3.66 less per day** than deterministic P50. The paired seven-day block-bootstrap
+95% interval is EUR -5.52 to EUR -1.60 per day; paired effect size is -0.21 and bootstrap
+probability of improvement is 0%. Probabilistic forecasting improved uncertainty calibration,
+but did not improve battery revenue under this policy and test period.
+
+![Phase 2 cumulative revenue](docs/assets/phase2_cumulative_revenue.png)
+
+The representative-day frontier makes the trade-off explicit: increasing risk aversion lowers
+scenario CVaR loss while also reducing expected revenue. The published sensitivity table varies
+duration, one-way efficiency, degradation cost and cycle limit on the same scenario set.
+
+![Phase 2 efficient frontier](docs/assets/phase2_efficient_frontier.png)
+
+All artifacts, including scenarios, error attribution, regime labels, paired inference,
+frontier and sensitivities, are in [`results/phase2_2024`](results/phase2_2024).
+
 ## Limitations
 
 This is a historical simulation of a price-taking battery, not commercial trading. It
@@ -174,6 +215,7 @@ python -m pip install -e ".[dev,dashboard,visualization]"
 pytest
 ruff check .
 bess-research run-phase1 --config configs/phase1.yaml
+bess-research run-phase2 --config configs/phase2.yaml
 python experiments/create_readme_figures.py
 streamlit run dashboard/app.py
 ```
@@ -186,6 +228,6 @@ at approximately 79% and includes a synthetic end-to-end pipeline replay.
 
 ## Future work
 
-Add archived ENTSO-E fundamental forecasts, LightGBM/XGBoost adapters, calibrated
-quantiles, true scenario/CVaR optimization, real reserve-market co-optimization,
-nested model selection, richer aging, intraday recourse, and market-rule-aware bids.
+Real reserve-market co-optimization, intraday recourse, market-rule-aware bids, and
+cell-chemistry-specific aging remain future work. Phase 2 results are published only after the
+untouched test run finishes; implemented methods are not presented as empirical findings.

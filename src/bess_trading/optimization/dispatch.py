@@ -154,3 +154,61 @@ def idle_dispatch(
         },
         index=index,
     )
+
+
+def optimize_stochastic_cvar(
+    price_scenarios: pd.DataFrame,
+    config: BatteryConfig,
+    *,
+    risk_aversion: float = 0.2,
+    alpha: float = 0.95,
+    initial_soc_mwh: float | None = None,
+    terminal_value_eur_per_mwh: float = 0.0,
+    solver: str = "HIGHS",
+) -> pd.DataFrame:
+    """Optimize one non-anticipative schedule against price scenarios and CVaR loss."""
+    if price_scenarios.empty or price_scenarios.isna().any().any():
+        raise ValueError("Scenario matrix must be non-empty and complete")
+    if not 0 <= risk_aversion or not 0 < alpha < 1:
+        raise ValueError("Invalid risk parameters")
+    dt = interval_hours(price_scenarios.index)
+    n, scenario_count = price_scenarios.shape
+    initial = config.initial_soc_mwh if initial_soc_mwh is None else initial_soc_mwh
+    charge, discharge = cp.Variable(n, nonneg=True), cp.Variable(n, nonneg=True)
+    mode, soc = cp.Variable(n, boolean=True), cp.Variable(n + 1)
+    zeta, excess = cp.Variable(), cp.Variable(scenario_count, nonneg=True)
+    constraints = [
+        soc[0] == initial,
+        soc[1:]
+        == soc[:-1]
+        + dt * (config.charge_efficiency * charge - discharge / config.discharge_efficiency),
+        soc >= config.min_soc_fraction * config.energy_mwh,
+        soc <= config.max_soc_fraction * config.energy_mwh,
+        charge <= config.power_mw * mode,
+        discharge <= config.power_mw * (1 - mode),
+        charge + discharge <= config.power_mw,
+        dt * cp.sum(charge + discharge)
+        <= 2 * config.energy_mwh * config.max_equivalent_cycles_per_day,
+    ]
+    degradation = config.degradation_cost_eur_per_mwh * dt * cp.sum(charge + discharge)
+    revenues = dt * price_scenarios.to_numpy().T @ (discharge - charge) - degradation
+    losses = -revenues
+    constraints.append(excess >= losses - zeta)
+    expected_revenue = cp.sum(revenues) / scenario_count
+    cvar_loss = zeta + cp.sum(excess) / ((1 - alpha) * scenario_count)
+    objective = expected_revenue - risk_aversion * cvar_loss + terminal_value_eur_per_mwh * soc[-1]
+    problem = cp.Problem(cp.Maximize(objective), constraints)
+    problem.solve(solver=solver)
+    if problem.status not in {cp.OPTIMAL, cp.OPTIMAL_INACCURATE}:
+        raise RuntimeError(f"Stochastic optimization failed: {problem.status}")
+    return pd.DataFrame(
+        {
+            "charge_mw": np.maximum(charge.value, 0),
+            "discharge_mw": np.maximum(discharge.value, 0),
+            "soc_start_mwh": soc.value[:-1],
+            "soc_mwh": soc.value[1:],
+            "forecast_price_eur_mwh": price_scenarios.mean(axis=1),
+            "interval_hours": dt,
+        },
+        index=price_scenarios.index,
+    )

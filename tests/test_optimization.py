@@ -1,9 +1,14 @@
+import numpy as np
 import pandas as pd
 import pytest
 
 from bess_trading.backtesting.engine import settle_dispatch
 from bess_trading.config import BatteryConfig
-from bess_trading.optimization.dispatch import optimize_dispatch, optimize_quantile_robust
+from bess_trading.optimization.dispatch import (
+    optimize_dispatch,
+    optimize_quantile_robust,
+    optimize_stochastic_cvar,
+)
 
 
 def test_optimizer_buys_low_sells_high_and_returns_terminal_soc() -> None:
@@ -22,3 +27,13 @@ def test_robust_requires_quantiles() -> None:
     idx = pd.date_range("2024-01-01", periods=2, freq="h", tz="UTC")
     with pytest.raises(ValueError, match="require"):
         optimize_quantile_robust(pd.DataFrame({"p50": [1, 2]}, index=idx), BatteryConfig())
+
+
+def test_stochastic_cvar_returns_feasible_nonanticipative_schedule() -> None:
+    idx = pd.date_range("2024-01-01", periods=24, freq="h", tz="UTC")
+    base = np.array([0.0] * 12 + [100.0] * 12)
+    scenarios = pd.DataFrame({"low": base - 10, "high": base + 10}, index=idx)
+    result = optimize_stochastic_cvar(scenarios, BatteryConfig(), risk_aversion=0.5)
+    assert result.charge_mw.iloc[:12].sum() > 0
+    assert result.discharge_mw.iloc[12:].sum() > 0
+    assert not ((result.charge_mw > 1e-8) & (result.discharge_mw > 1e-8)).any()

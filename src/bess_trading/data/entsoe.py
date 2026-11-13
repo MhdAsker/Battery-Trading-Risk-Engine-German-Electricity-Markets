@@ -20,6 +20,9 @@ LOGGER = logging.getLogger(__name__)
 API_URL = "https://web-api.tp.entsoe.eu/api"
 GERMANY_LUXEMBOURG = "10Y1001A1001A82H"
 GERMANY_CONTROL_AREA = "10Y1001A1001A83F"
+PSR_SOLAR = "B16"
+PSR_WIND_OFFSHORE = "B18"
+PSR_WIND_ONSHORE = "B19"
 
 
 class EntsoeError(RuntimeError):
@@ -101,6 +104,44 @@ class EntsoeClient:
             "load_mw",
             "quantity",
         )
+
+    def day_ahead_load_forecast(
+        self,
+        start: str | datetime | pd.Timestamp,
+        end: str | datetime | pd.Timestamp,
+        zone: str = GERMANY_CONTROL_AREA,
+    ) -> pd.DataFrame:
+        """Download archived day-ahead total-load forecasts (A65/A01)."""
+        return self._series_request(
+            {"documentType": "A65", "processType": "A01", "outBiddingZone_Domain": zone},
+            start,
+            end,
+            "load_forecast_mw",
+            "quantity",
+        )
+
+    def day_ahead_wind_solar_forecast(
+        self,
+        start: str | datetime | pd.Timestamp,
+        end: str | datetime | pd.Timestamp,
+        zone: str = GERMANY_CONTROL_AREA,
+    ) -> pd.DataFrame:
+        """Download archived A69/A01 solar and wind forecasts by production type."""
+        raw = self._request_with_dates(
+            {"documentType": "A69", "processType": "A01", "in_Domain": zone}, start, end
+        )
+        long = parse_timeseries(raw, value_tag="quantity", include_psr=True)
+        if long.empty:
+            return pd.DataFrame()
+        wide = long.pivot_table(
+            index="timestamp_utc", columns="psr_type", values="value", aggfunc="sum"
+        )
+        result = pd.DataFrame(index=wide.index)
+        result["solar_forecast_mw"] = wide.get(PSR_SOLAR, 0.0)
+        result["wind_forecast_mw"] = wide.get(PSR_WIND_ONSHORE, 0.0) + wide.get(
+            PSR_WIND_OFFSHORE, 0.0
+        )
+        return result.sort_index()
 
     def generation(
         self,

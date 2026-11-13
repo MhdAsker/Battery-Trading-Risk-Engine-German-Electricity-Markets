@@ -23,8 +23,16 @@ def main() -> None:
     history.add_argument("--start", required=True)
     history.add_argument("--end", required=True)
     history.add_argument("--output-dir", default="data/raw")
+    fundamentals = sub.add_parser(
+        "fetch-fundamentals", help="Download archived day-ahead load, wind and solar forecasts"
+    )
+    fundamentals.add_argument("--start", required=True)
+    fundamentals.add_argument("--end", required=True)
+    fundamentals.add_argument("--output-dir", default="data/raw")
     run_phase1 = sub.add_parser("run-phase1", help="Run the audited Phase 1 experiment")
     run_phase1.add_argument("--config", default="configs/phase1.yaml")
+    run_phase2 = sub.add_parser("run-phase2", help="Run the probabilistic Phase 2 experiment")
+    run_phase2.add_argument("--config", default="configs/phase2.yaml")
     args = parser.parse_args()
     logging.basicConfig(
         level=args.log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
@@ -43,6 +51,15 @@ def main() -> None:
             report.raise_if_invalid()
             target = output_dir / f"entsoe_prices_{start:%Y%m%d}_{end:%Y%m%d}.parquet"
             save_raw(frame, target)
+    elif args.command == "fetch-fundamentals":
+        client = EntsoeClient()
+        output_dir = Path(args.output_dir)
+        for start, end in annual_chunks(args.start, args.end):
+            load = client.day_ahead_load_forecast(start, end)
+            renewables = client.day_ahead_wind_solar_forecast(start, end)
+            frame = load.join(renewables, how="outer").sort_index()
+            target = output_dir / f"entsoe_fundamentals_{start:%Y%m%d}_{end:%Y%m%d}.parquet"
+            save_raw(frame, target)
     elif args.command == "run-phase1":
         from bess_trading.experiments.phase1 import run
 
@@ -50,6 +67,13 @@ def main() -> None:
         logging.getLogger(__name__).info(
             "Phase 1 completed with %s delivery days",
             result["experiment"]["complete_dispatch_days"],
+        )
+    elif args.command == "run-phase2":
+        from bess_trading.experiments.phase2 import run
+
+        result = run(args.config)
+        logging.getLogger(__name__).info(
+            "Phase 2 completed with %s delivery days", result["experiment"]["test_days"]
         )
 
 

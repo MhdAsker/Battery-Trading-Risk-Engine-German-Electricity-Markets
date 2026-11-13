@@ -1,0 +1,57 @@
+{
+  "experiment": {
+    "phase": 2,
+    "calibration_start": "2023-07-01 00:00:00+00:00",
+    "test_start": "2024-01-01 00:00:00+00:00",
+    "test_end_exclusive": "2025-01-01 00:00:00+00:00",
+    "test_hours": 8549,
+    "test_days": 326,
+    "conformal_correction_eur_mwh": 6.301694050562524,
+    "test_isolation_passed": true
+  },
+  "probabilistic": {
+    "p10_p90_coverage": 0.8043045970288922,
+    "wis": 15.279608631932152,
+    "crps": 17.009120156848546,
+    "pit_mean": 0.48045126839025476,
+    "scenario_diagnostics": {
+      "actual_lag1_correlation": 0.9178021320420879,
+      "mean_scenario_lag1_correlation": 0.8802972422674417,
+      "lag1_absolute_error": 0.03750488977464628,
+      "actual_tail_frequency": 0.20015337423312884,
+      "scenario_tail_frequency": 0.22548312883435584,
+      "tail_frequency_absolute_error": 0.025329754601226995
+    },
+    "conditional_coverage": {
+      "negative_price": {
+        "count": 428,
+        "coverage": 0.5233644859813084,
+        "mean_width": 90.16415914176373
+      },
+      "price_spike": {
+        "count": 428,
+        "coverage": 0.397196261682243,
+        "mean_width": 94.973720982068
+      },
+      "high_volatility": {
+        "count": 2138,
+        "coverage": 0.7619270346117867,
+        "mean_width": 75.17425126925278
+      }
+    }
+  },
+  "revenue_comparison": {
+    "mean_daily_difference_eur": -3.6575322977353326,
+    "ci_lower_eur": -5.521514159861102,
+    "ci_upper_eur": -1.5964427810738768,
+    "confidence": 0.95,
+    "block_days": 7,
+    "bootstrap_samples": 2000,
+    "paired_effect_size_dz": -0.21225695712658246,
+    "probability_of_improvement": 0.0
+  },
+  "research_answers": {
+    "probabilistic_value": "not statistically established",
+    "negative_results_reported": true
+  }
+}

@@ -64,6 +64,7 @@ def paired_block_bootstrap_ci(
             selected.extend((start + np.arange(block_days)) % n)
         draws.append(float(differences[np.asarray(selected[:n])].mean()))
     tail = (1 - confidence) / 2
+    standard_deviation = float(differences.std(ddof=1))
     return {
         "mean_daily_difference_eur": float(differences.mean()),
         "ci_lower_eur": float(np.quantile(draws, tail)),
@@ -71,4 +72,8 @@ def paired_block_bootstrap_ci(
         "confidence": confidence,
         "block_days": block_days,
         "bootstrap_samples": samples,
+        "paired_effect_size_dz": (
+            float(differences.mean() / standard_deviation) if standard_deviation > 0 else 0.0
+        ),
+        "probability_of_improvement": float(np.mean(np.asarray(draws) > 0)),
     }
