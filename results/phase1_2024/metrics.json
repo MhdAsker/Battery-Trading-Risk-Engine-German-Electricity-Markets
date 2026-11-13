@@ -1,0 +1,456 @@
+{
+  "forecast_metrics": {
+    "persistence": {
+      "mae": 27.708352046783624,
+      "rmse": 44.50490404609415
+    },
+    "hour_of_week": {
+      "mae": 41.25686005463014,
+      "rmse": 56.33030705994603
+    },
+    "linear": {
+      "mae": 23.90946313520363,
+      "rmse": 37.788529243288195
+    },
+    "p50": {
+      "mae": 23.018876318204494,
+      "rmse": 40.10603866370501
+    },
+    "quantiles": {
+      "p10_pinball": 6.121719859462713,
+      "p50_pinball": 11.509438159102247,
+      "p90_pinball": 5.544100227923243,
+      "coverage": 0.707485380116959,
+      "mean_width": 56.72341515904325
+    }
+  },
+  "strategy_metrics": {
+    "hour_of_week": {
+      "gross_revenue_eur": 43408.49969167993,
+      "net_revenue_eur": 34830.81548115361,
+      "degradation_cost_eur": 8577.684210526315,
+      "throughput_mwh": 1715.536842105263,
+      "equivalent_cycles": 428.88421052631577,
+      "interval_max_drawdown_eur": -652.8792419946112,
+      "interval_revenue_volatility_eur": 43.89239003796055,
+      "interval_cvar_loss_eur": 88.00841108674926,
+      "daily_mean_eur": 106.51625529404772,
+      "daily_volatility_eur": 93.96533143625221,
+      "loss_probability": 0.08256880733944955,
+      "downside_deviation_eur": 7.606959472353521,
+      "daily_var_95_loss_eur": 9.805356370426644,
+      "daily_cvar_95_loss_eur": 29.00924645508801,
+      "maximum_drawdown_eur": -106.57406315789558,
+      "mean_loss_eur": 19.260828744367846,
+      "regret_vs_perfect_eur": 15568.271195287452,
+      "revenue_per_mw_day_eur": 106.51625529404772,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": -20.989111732617765,
+        "ci_lower_eur": -28.322670498075812,
+        "ci_upper_eur": -14.427378860917125,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "linear": {
+      "gross_revenue_eur": 50413.653318284916,
+      "net_revenue_eur": 42207.89497340957,
+      "degradation_cost_eur": 8205.758344875347,
+      "throughput_mwh": 1641.1516689750692,
+      "equivalent_cycles": 410.2879172437673,
+      "interval_max_drawdown_eur": -250.88087281277694,
+      "interval_revenue_volatility_eur": 44.68166270999559,
+      "interval_cvar_loss_eur": 82.22392165003156,
+      "daily_mean_eur": 129.07613141715464,
+      "daily_volatility_eur": 115.92266751305056,
+      "loss_probability": 0.039755351681957186,
+      "downside_deviation_eur": 3.954708399977264,
+      "daily_var_95_loss_eur": -3.1867146052631616,
+      "daily_cvar_95_loss_eur": 11.788262498525237,
+      "maximum_drawdown_eur": -43.39736842105049,
+      "mean_loss_eur": 15.866835440928456,
+      "regret_vs_perfect_eur": 8191.191703031487,
+      "revenue_per_mw_day_eur": 129.07613141715467,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": 1.5707643904891588,
+        "ci_lower_eur": -3.391495586346021,
+        "ci_upper_eur": 7.366386457558666,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "ml_p50": {
+      "gross_revenue_eur": 49810.25674902156,
+      "net_revenue_eur": 41694.25501771962,
+      "degradation_cost_eur": 8116.001731301939,
+      "throughput_mwh": 1623.2003462603877,
+      "equivalent_cycles": 405.80008656509693,
+      "interval_max_drawdown_eur": -244.5942021439987,
+      "interval_revenue_volatility_eur": 43.41023119989546,
+      "interval_cvar_loss_eur": 82.01550855476756,
+      "daily_mean_eur": 127.5053670266655,
+      "daily_volatility_eur": 104.8046265737393,
+      "loss_probability": 0.045871559633027525,
+      "downside_deviation_eur": 7.2075501178888395,
+      "daily_var_95_loss_eur": -1.7083665149734273,
+      "daily_cvar_95_loss_eur": 24.484380738843704,
+      "maximum_drawdown_eur": -107.94962105263153,
+      "mean_loss_eur": 27.805264004195767,
+      "regret_vs_perfect_eur": 8704.831658721443,
+      "revenue_per_mw_day_eur": 127.5053670266655,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": 0.0,
+        "ci_lower_eur": 0.0,
+        "ci_upper_eur": 0.0,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "perfect_foresight": {
+      "gross_revenue_eur": 58514.53697531844,
+      "net_revenue_eur": 50399.08667644106,
+      "degradation_cost_eur": 8115.4502988773875,
+      "throughput_mwh": 1623.0900597754776,
+      "equivalent_cycles": 405.7725149438694,
+      "interval_max_drawdown_eur": -607.3353696659469,
+      "interval_revenue_volatility_eur": 46.28502995444865,
+      "interval_cvar_loss_eur": 79.46691859072605,
+      "daily_mean_eur": 154.12564732856592,
+      "daily_volatility_eur": 128.57156942909484,
+      "loss_probability": 0.01834862385321101,
+      "downside_deviation_eur": 2.895305677670135,
+      "daily_var_95_loss_eur": -17.279620720221615,
+      "daily_cvar_95_loss_eur": 0.12256908837136539,
+      "maximum_drawdown_eur": -35.972147147105716,
+      "mean_loss_eur": 17.371357861566825,
+      "regret_vs_perfect_eur": 0.0,
+      "revenue_per_mw_day_eur": 154.12564732856595,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": 26.620280301900422,
+        "ci_lower_eur": 20.815022937734696,
+        "ci_upper_eur": 34.24207591652816,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "persistence": {
+      "gross_revenue_eur": 47639.44948506567,
+      "net_revenue_eur": 39403.714685896695,
+      "degradation_cost_eur": 8235.734799168975,
+      "throughput_mwh": 1647.146959833795,
+      "equivalent_cycles": 411.7867399584488,
+      "interval_max_drawdown_eur": -250.88087281277694,
+      "interval_revenue_volatility_eur": 44.47686888519215,
+      "interval_cvar_loss_eur": 83.21639500442332,
+      "daily_mean_eur": 120.50065653179418,
+      "daily_volatility_eur": 119.35276489306136,
+      "loss_probability": 0.0764525993883792,
+      "downside_deviation_eur": 8.596785123534412,
+      "daily_var_95_loss_eur": 12.938415131578946,
+      "daily_cvar_95_loss_eur": 32.97735764809087,
+      "maximum_drawdown_eur": -112.11614670738345,
+      "mean_loss_eur": 24.009885690016407,
+      "regret_vs_perfect_eur": 10995.371990544365,
+      "revenue_per_mw_day_eur": 120.50065653179418,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": -7.004710494871321,
+        "ci_lower_eur": -13.004844657964934,
+        "ci_upper_eur": -0.221850193437949,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "quantile_robust": {
+      "gross_revenue_eur": 44733.38655878237,
+      "net_revenue_eur": 38617.27482055522,
+      "degradation_cost_eur": 6116.111738227148,
+      "throughput_mwh": 1223.2223476454294,
+      "equivalent_cycles": 305.80558691135735,
+      "interval_max_drawdown_eur": -224.74372631579172,
+      "interval_revenue_volatility_eur": 38.605631551165835,
+      "interval_cvar_loss_eur": 72.35001445695269,
+      "daily_mean_eur": 118.09564165307407,
+      "daily_volatility_eur": 98.47987904184697,
+      "loss_probability": 0.03363914373088685,
+      "downside_deviation_eur": 3.303285137500507,
+      "daily_var_95_loss_eur": -0.0,
+      "daily_cvar_95_loss_eur": 4.459034571476536,
+      "maximum_drawdown_eur": -40.685831578950456,
+      "mean_loss_eur": 13.377103714429609,
+      "regret_vs_perfect_eur": 11781.81185588584,
+      "revenue_per_mw_day_eur": 118.09564165307407,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": -9.409725373591424,
+        "ci_lower_eur": -13.392469568069,
+        "ci_upper_eur": -5.986522232026399,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "rule_based": {
+      "gross_revenue_eur": 31243.50426943394,
+      "net_revenue_eur": 25009.815886679527,
+      "degradation_cost_eur": 6233.688382754412,
+      "throughput_mwh": 1246.737676550882,
+      "equivalent_cycles": 311.6844191377205,
+      "interval_max_drawdown_eur": -250.61842105262986,
+      "interval_revenue_volatility_eur": 34.87618662208063,
+      "interval_cvar_loss_eur": 77.24369696330521,
+      "daily_mean_eur": 76.48261739045726,
+      "daily_volatility_eur": 87.04916504910699,
+      "loss_probability": 0.14984709480122324,
+      "downside_deviation_eur": 23.59212539869388,
+      "daily_var_95_loss_eur": 50.2469667105263,
+      "daily_cvar_95_loss_eur": 90.0100161845975,
+      "maximum_drawdown_eur": -198.2347578947374,
+      "mean_loss_eur": 42.914577141154105,
+      "regret_vs_perfect_eur": 25389.270789761533,
+      "revenue_per_mw_day_eur": 76.48261739045726,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": -51.02274963620822,
+        "ci_lower_eur": -59.85711790805121,
+        "ci_upper_eur": -42.58093378739845,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    },
+    "zero_trade": {
+      "gross_revenue_eur": 0.0,
+      "net_revenue_eur": 0.0,
+      "degradation_cost_eur": 0.0,
+      "throughput_mwh": 0.0,
+      "equivalent_cycles": 0.0,
+      "interval_max_drawdown_eur": 0.0,
+      "interval_revenue_volatility_eur": 0.0,
+      "interval_cvar_loss_eur": 0.0,
+      "daily_mean_eur": 0.0,
+      "daily_volatility_eur": 0.0,
+      "loss_probability": 0.0,
+      "downside_deviation_eur": 0.0,
+      "daily_var_95_loss_eur": -0.0,
+      "daily_cvar_95_loss_eur": 0.0,
+      "maximum_drawdown_eur": 0.0,
+      "mean_loss_eur": 0.0,
+      "regret_vs_perfect_eur": 50399.08667644106,
+      "revenue_per_mw_day_eur": 0.0,
+      "paired_ci_vs_ml_p50": {
+        "mean_daily_difference_eur": -127.5053670266655,
+        "ci_lower_eur": -147.29143982974065,
+        "ci_upper_eur": -108.52655157261181,
+        "confidence": 0.95,
+        "block_days": 7,
+        "bootstrap_samples": 2000
+      }
+    }
+  },
+  "daily_pnl_summary": {
+    "hour_of_week": {
+      "count": 327.0,
+      "mean": 106.51625529404772,
+      "std": 93.96533143625221,
+      "min": -63.8018947368421,
+      "25%": 45.84671347949373,
+      "50%": 88.9264727851165,
+      "75%": 152.86543857804827,
+      "max": 802.0622122415105
+    },
+    "linear": {
+      "count": 327.0,
+      "mean": 129.07613141715464,
+      "std": 115.92266751305056,
+      "min": -40.09686315789474,
+      "25%": 48.52399342105264,
+      "50%": 111.6928076907117,
+      "75%": 184.70376951379765,
+      "max": 1163.542757894737
+    },
+    "ml_p50": {
+      "count": 327.0,
+      "mean": 127.5053670266655,
+      "std": 104.8046265737393,
+      "min": -80.07191578947369,
+      "25%": 47.17829418282549,
+      "50%": 119.5058731862508,
+      "75%": 184.62737410004152,
+      "max": 815.3550329621689
+    },
+    "perfect_foresight": {
+      "count": 327.0,
+      "mean": 154.12564732856592,
+      "std": 128.57156942909484,
+      "min": -35.97214714710563,
+      "25%": 64.42449354727162,
+      "50%": 140.3642947368421,
+      "75%": 209.02335789473688,
+      "max": 1416.184750646656
+    },
+    "persistence": {
+      "count": 327.0,
+      "mean": 120.50065653179418,
+      "std": 119.35276489306136,
+      "min": -83.85292667833913,
+      "25%": 36.60213684210527,
+      "50%": 108.99304707102844,
+      "75%": 179.82127328307632,
+      "max": 1163.542757894737
+    },
+    "quantile_robust": {
+      "count": 327.0,
+      "mean": 118.09564165307407,
+      "std": 98.47987904184697,
+      "min": -40.68583157894735,
+      "25%": 38.81777905889065,
+      "50%": 108.32943157894739,
+      "75%": 181.77696842105263,
+      "max": 809.5462891966761
+    },
+    "rule_based": {
+      "count": 327.0,
+      "mean": 76.48261739045726,
+      "std": 87.04916504910699,
+      "min": -198.23475789473684,
+      "25%": 19.345473684210518,
+      "50%": 66.80821052631579,
+      "75%": 128.25273684210526,
+      "max": 477.2602947368421
+    },
+    "zero_trade": {
+      "count": 327.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "25%": 0.0,
+      "50%": 0.0,
+      "75%": 0.0,
+      "max": 0.0
+    }
+  },
+  "experiment": {
+    "phase": 1,
+    "test_start": "2024-01-01 00:00:00+00:00",
+    "test_end_exclusive": "2025-01-01 00:00:00+00:00",
+    "complete_dispatch_days": 327,
+    "battery": {
+      "power_mw": 1.0,
+      "energy_mwh": 2.0,
+      "min_soc_fraction": 0.1,
+      "max_soc_fraction": 0.9,
+      "initial_soc_fraction": 0.5,
+      "charge_efficiency": 0.95,
+      "discharge_efficiency": 0.95,
+      "degradation_cost_eur_per_mwh": 5.0,
+      "max_equivalent_cycles_per_day": 1.5
+    },
+    "config": {
+      "seed": 42,
+      "experiment": {
+        "inputs": [
+          "data/raw/entsoe_prices_20200101_20210101.parquet",
+          "data/raw/entsoe_prices_20210101_20220101.parquet",
+          "data/raw/entsoe_prices_20220101_20230101.parquet",
+          "data/raw/entsoe_prices_2023.parquet",
+          "data/raw/entsoe_prices_2024.parquet"
+        ],
+        "test_start": "2024-01-01T00:00:00Z",
+        "test_end": "2025-01-01T00:00:00Z",
+        "output": "results/phase1_2024",
+        "minimum_oos_days": 300,
+        "bootstrap_samples": 2000
+      },
+      "battery": {
+        "power_mw": 1.0,
+        "energy_mwh": 2.0,
+        "min_soc_fraction": 0.1,
+        "max_soc_fraction": 0.9,
+        "initial_soc_fraction": 0.5,
+        "charge_efficiency": 0.95,
+        "discharge_efficiency": 0.95,
+        "degradation_cost_eur_per_mwh": 5.0,
+        "max_equivalent_cycles_per_day": 1.5
+      },
+      "forecasting": {
+        "train_days": 365,
+        "retrain_days": 7,
+        "issue_hour_local": 11,
+        "model_max_iter": 100
+      },
+      "optimization": {
+        "risk_aversion": 0.35,
+        "terminal_value_eur_per_mwh": 50.0,
+        "solver": "HIGHS"
+      }
+    },
+    "config_path": "configs\\phase1.yaml",
+    "inputs": {
+      "data\\raw\\entsoe_prices_20200101_20210101.parquet": "e7fd9ee0b917b1e88d37b9033e96f61bf286c1273dd8d8a6a4c5b42860f8ed31",
+      "data\\raw\\entsoe_prices_20210101_20220101.parquet": "9cbb7d23218e41b1ccc8bd9c38eedb7211bf1e305c39f7bf10e93cf55c04bfa3",
+      "data\\raw\\entsoe_prices_20220101_20230101.parquet": "d56d1a4755895150aadbff5f2cb58146c0083a033860f121cbddb708eff7bb28",
+      "data\\raw\\entsoe_prices_2023.parquet": "6b5b67a06e642e8d9ee194d679f8b960639be13c8cc08263704a8094680e6734",
+      "data\\raw\\entsoe_prices_2024.parquet": "a15fa67a515d6893e4fe3a074340fe869485221f1b5477ef3503d08b0a9483ce"
+    },
+    "seed": 42,
+    "causality_audit_passed": true,
+    "missingness": {
+      "expected_intervals": 8784,
+      "missing_intervals": 51,
+      "missing_rate": 0.005806010928961749,
+      "longest_missing_run_hours": 7,
+      "excluded_delivery_days": [
+        "2024-01-03",
+        "2024-01-06",
+        "2024-01-15",
+        "2024-02-04",
+        "2024-02-09",
+        "2024-03-09",
+        "2024-03-24",
+        "2024-04-01",
+        "2024-04-03",
+        "2024-04-07",
+        "2024-04-16",
+        "2024-04-17",
+        "2024-04-27",
+        "2024-04-30",
+        "2024-05-10",
+        "2024-05-30",
+        "2024-06-30",
+        "2024-07-02",
+        "2024-07-07",
+        "2024-07-14",
+        "2024-07-21",
+        "2024-08-12",
+        "2024-08-25",
+        "2024-09-28",
+        "2024-10-04",
+        "2024-10-06",
+        "2024-10-21",
+        "2024-11-06",
+        "2024-11-24",
+        "2024-11-28",
+        "2024-12-07",
+        "2024-12-16",
+        "2024-12-18",
+        "2024-12-30"
+      ],
+      "excluded_day_count": 34,
+      "observed_characteristics_complete_days": {
+        "days": 333,
+        "mean_observed_price_eur_mwh": 79.76278804891848,
+        "mean_observed_daily_range_eur_mwh": 110.11696696696696
+      },
+      "observed_characteristics_excluded_days": {
+        "days": 34,
+        "mean_observed_price_eur_mwh": 65.41216302106366,
+        "mean_observed_daily_range_eur_mwh": 118.58558823529411
+      },
+      "warning": "Excluded days may be non-random; no settlement value is imputed."
+    },
+    "note": "Historical energy-only simulation; not live or commercial trading."
+  }
+}

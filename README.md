@@ -6,8 +6,14 @@ risk. It combines real ENTSO-E prices, rolling probabilistic forecasting, constr
 optimization, realized-price settlement, and an interactive dashboard. It does not
 claim live trading performance or fabricate balancing-market data.
 
+> **Phase 1 correctness upgrade:** the current pipeline uses causal daily forecast
+> snapshots, German delivery days, interval-aware mixed-integer dispatch, continuous
+> SOC, daily P&L risk, paired bootstrap confidence intervals, and eight baselines. The
+> earlier November pilot remains available for comparison; corrected full-year results
+> are generated in `results/phase1_2024`.
+
 ![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB)
-![Tests](https://img.shields.io/badge/tests-11%20passing-success)
+![Tests](https://img.shields.io/badge/tests-27%20passing-success)
 ![Market](https://img.shields.io/badge/market-DE--LU%20day--ahead-orange)
 
 ![Net battery-trading revenue by strategy](docs/assets/strategy_net_revenue.png)
@@ -41,6 +47,8 @@ Copy-Item .env.example .env
 # Load ENTSOE_API_TOKEN into your shell using your preferred secret manager.
 python -m pip install -e ".[dev,dashboard,models]"
 bess-research fetch-prices --start 2024-01-01 --end 2025-01-01
+# Or acquire a 3–5 year research history in API-safe annual chunks:
+bess-research fetch-history --start 2020-01-01 --end 2025-01-01
 ```
 
 The CLI reads `ENTSOE_API_TOKEN` from the environment; it does not automatically parse
@@ -73,25 +81,30 @@ terminal-SOC constraints. The robust policy penalizes charging with upper-tail p
 and discharging with lower-tail prices. Perfect foresight uses the same optimizer and
 is only an unattainable upper bound.
 
+Phase 1 explicitly includes the market time unit in SOC, settlement, throughput, and
+degradation equations. A binary operating mode prevents simultaneous charge/discharge,
+SOC carries across 23/24/25-hour German delivery days, and a configurable terminal
+energy value replaces forced daily SOC resets.
+
 ## Published benchmark results
 
-Schedules are settled against realized prices, never forecasts. Metrics include gross
-and net revenue, throughput, cycles, degradation, drawdown, volatility, and tail loss.
-
-The first checked-in benchmark uses 27 complete UTC delivery days from 1–30 November
-2024. Models are trained on trailing ENTSO-E DE-LU prices; days with incomplete
-realized prices are excluded from dispatch and settlement. Values below are simulated
-for the default 1 MW / 2 MWh battery and include €5/MWh throughput degradation.
+The corrected Phase 1 benchmark uses five years of ENTSO-E prices (2020–2024) and
+covers **327 complete German delivery days** in the 2024 out-of-sample replay. Models
+use daily causal snapshots and weekly refits; schedules are settled against realized
+prices. Values below simulate the default 1 MW / 2 MWh battery with €5/MWh throughput
+degradation. Fifty-one test-year source intervals are not imputed for
+settlement, and affected delivery days are excluded and reported in `metrics.json`.
 
 | Forecast | MAE (€/MWh) | RMSE (€/MWh) |
 |---|---:|---:|
-| Persistence | 34.71 | 56.26 |
-| Historical hour-of-week | 40.34 | 67.29 |
-| Quantile GBM P50 | **29.06** | **55.61** |
+| Persistence | 27.71 | 44.50 |
+| Historical hour-of-week | 30.88 | 47.73 |
+| Regularized linear | 23.91 | **37.78** |
+| Quantile GBM P50 | **22.75** | 39.59 |
 
-The P10–P90 interval covered 53.4% of realized prices with a mean width of
-€54.86/MWh. This is below the nominal 80% target, so the quantiles are not presented as
-well calibrated.
+The P10–P90 interval covered 70.8% of prices with a mean width of €56.66/MWh. This is a
+material improvement over the legacy pilot but remains below the nominal 80% target;
+the quantiles are therefore still labelled under-calibrated.
 
 ![Forecast uncertainty and realized price](docs/assets/forecast_uncertainty_day.png)
 
@@ -99,39 +112,42 @@ The highest-spread test day illustrates an economically important failure mode: 
 model recognized an afternoon price increase, but materially underestimated its size
 and the realized price moved outside P90.
 
-| Strategy | Net revenue (€) | Throughput (MWh) | Max drawdown (€) | Tail loss / CVaR (€) | Regret (€) |
-|---|---:|---:|---:|---:|---:|
-| Perfect foresight upper bound | 3,407 | 128.31 | -239.69 | 98.31 | 0 |
-| Persistence dispatch | 2,317 | 131.79 | -245.01 | 106.51 | 1,091 |
-| Historical hour-of-week | 785 | 152.45 | -288.90 | 115.03 | 2,622 |
-| ML P50 dispatch | 2,210 | 120.62 | -218.97 | 104.80 | 1,198 |
-| Quantile-robust dispatch | **2,340** | **88.91** | **-205.71** | **94.21** | **1,067** |
+| Strategy | Net revenue (€) | Throughput (MWh) | Daily CVaR loss (€) | Regret (€) |
+|---|---:|---:|---:|---:|
+| Perfect foresight upper bound | 50,399 | 1,623.1 | 0.1 | 0 |
+| Regularized linear | **42,207** | 1,641.3 | 11.8 | 8,192 |
+| ML P50 | 41,661 | 1,632.7 | 23.3 | 8,738 |
+| Persistence | 39,404 | 1,647.1 | 33.0 | 10,995 |
+| Quantile robust | 38,686 | **1,223.8** | **4.5** | 11,713 |
+| Hour of week | 36,542 | 1,715.5 | 37.9 | 13,857 |
+| Rule based | 25,074 | 1,249.9 | 92.9 | 25,325 |
+| Zero trade | 0 | 0 | 0 | 50,399 |
 
-The results demonstrate why MAE is not a trading objective: ML P50 had the lowest MAE
-but earned less than persistence. The robust policy earned 5.9% more than ML P50 while
-using 26.3% less throughput and reducing the reported tail loss by 10.1%. The weekly
-MAE–revenue Spearman estimate was 0.60, but with only five weeks (`p=0.285`) it is not
-statistically conclusive. These are descriptive findings for one short historical
-window, not expected annual returns.
+The corrected result is more nuanced than the pilot. P50 has the lowest MAE, but the
+linear model earns €546 more; its paired seven-day block-bootstrap interval versus P50
+includes zero, so that revenue difference is not statistically established. The
+quantile-robust policy sacrifices €2,975 versus P50 while reducing throughput by 25.1%
+and daily CVaR loss from €23.27 to €4.46. This supports a risk–return trade-off, not a
+claim that probabilistic dispatch dominates on revenue.
 
 ![Risk and return comparison](docs/assets/risk_return.png)
 
-The robust policy occupies the preferred upper-left region: higher revenue and lower
-tail loss than the other implementable strategies. Bubble size represents throughput,
-which also makes the reduction in battery use visible.
+The robust policy occupies the low-risk region but not the highest-return region.
+Bubble size represents throughput, making its lower battery use visible.
 
 ![Cumulative realized net revenue](docs/assets/cumulative_net_revenue.png)
 
 ### Battery operation
 
-The optimizer respects grid-side power, SOC, efficiency, cycling, and terminal-energy
-constraints. On the highest-spread test day it charges before the expected peak,
-discharges into the peak, and restores terminal SOC near the end of the horizon.
+The optimizer respects grid-side power, SOC, efficiency, cycling, binary operating
+mode, and continuous interday SOC. The representative day shows how forecast
+uncertainty translates into charge/discharge decisions.
 
 ![Battery dispatch and state of charge](docs/assets/battery_dispatch_day.png)
 
 Machine-readable forecasts, dispatch, metrics, input hashes, and a full discussion are
-in [`results/energy_benchmark_2024`](results/energy_benchmark_2024). The experiment
+in [`results/phase1_2024`](results/phase1_2024). The legacy pilot remains in
+[`results/energy_benchmark_2024`](results/energy_benchmark_2024). The experiment
 design and future regime analyses are specified in
 [docs/EXPERIMENT_DESIGN.md](docs/EXPERIMENT_DESIGN.md).
 
@@ -148,6 +164,8 @@ generation are not valid forecast-time features.
 Source code lives in `src/bess_trading`; configuration, tests, documentation, dashboard,
 and immutable/processed data layers are separate. The full dataflow and artifact
 contract are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+The requirement-by-requirement acceptance record is in
+[docs/PHASE1_IMPLEMENTATION.md](docs/PHASE1_IMPLEMENTATION.md).
 
 ## Reproduce
 
@@ -155,7 +173,7 @@ contract are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 python -m pip install -e ".[dev,dashboard,visualization]"
 pytest
 ruff check .
-python experiments/run_energy_benchmark.py data/raw/entsoe_prices_2023.parquet data/raw/entsoe_prices_2024.parquet
+bess-research run-phase1 --config configs/phase1.yaml
 python experiments/create_readme_figures.py
 streamlit run dashboard/app.py
 ```
@@ -163,9 +181,11 @@ streamlit run dashboard/app.py
 Docker builds the dashboard without embedding credentials. Mount data read-only or use
 the CLI outside the container to create experiment artifacts.
 
+Phase 1 CI currently enforces at least 75% package coverage; the implemented suite is
+at approximately 79% and includes a synthetic end-to-end pipeline replay.
+
 ## Future work
 
-Add versioned ENTSO-E forecast ingestion, a causal experiment runner, LightGBM/XGBoost
-adapters, real reserve-market loaders and co-optimization, nested hyperparameter
-selection, block bootstrap inference, richer aging, intraday recourse, and market-rule
-aware bid construction.
+Add archived ENTSO-E fundamental forecasts, LightGBM/XGBoost adapters, calibrated
+quantiles, true scenario/CVaR optimization, real reserve-market co-optimization,
+nested model selection, richer aging, intraday recourse, and market-rule-aware bids.

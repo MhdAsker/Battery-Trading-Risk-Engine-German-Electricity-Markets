@@ -22,8 +22,11 @@ COLORS = {
 }
 LABELS = {
     "perfect_foresight": "Perfect foresight",
+    "zero_trade": "Zero trade",
+    "rule_based": "Rule based",
     "persistence": "Persistence",
     "hour_of_week": "Hour of week",
+    "linear": "Linear",
     "ml_p50": "ML P50",
     "quantile_robust": "Quantile robust",
 }
@@ -54,26 +57,39 @@ def save(fig: plt.Figure, output: Path, name: str) -> None:
 
 def strategy_overview(metrics: dict[str, object], output: Path) -> None:
     values = metrics["strategy_metrics"]
-    order = [
+    preferred = [
         "perfect_foresight",
-        "persistence",
+        "linear",
         "ml_p50",
+        "persistence",
         "quantile_robust",
         "hour_of_week",
+        "rule_based",
+        "zero_trade",
     ]
+    order = [name for name in preferred if name in values]
     revenue = [values[name]["net_revenue_eur"] for name in order]
-    colors = [COLORS["grey"], COLORS["orange"], COLORS["blue"], COLORS["green"], COLORS["cyan"]]
-    fig, ax = plt.subplots(figsize=(10, 5.2))
+    palette = [
+        COLORS["grey"],
+        COLORS["red"],
+        COLORS["blue"],
+        COLORS["orange"],
+        COLORS["green"],
+        COLORS["cyan"],
+    ]
+    colors = [palette[position % len(palette)] for position in range(len(order))]
+    fig, ax = plt.subplots(figsize=(12, 5.4))
     bars = ax.bar([LABELS[name] for name in order], revenue, color=colors, width=0.68)
     ax.bar_label(bars, labels=[f"€{value:,.0f}" for value in revenue], padding=4, fontweight="bold")
     ax.set_ylabel("Net revenue (€)")
-    ax.set_title("Battery trading revenue by strategy — November 2024 benchmark")
+    days = metrics.get("experiment", {}).get("complete_dispatch_days", "published")
+    ax.set_title("Battery trading revenue by strategy — 2024 Phase 1 benchmark")
     ax.set_ylim(0, max(revenue) * 1.18)
     ax.tick_params(axis="x", rotation=12)
     ax.text(
         0.99,
         0.98,
-        "1 MW / 2 MWh · 27 complete days · €5/MWh degradation",
+        f"1 MW / 2 MWh · {days} complete days · €5/MWh degradation",
         transform=ax.transAxes,
         ha="right",
         va="top",
@@ -85,8 +101,14 @@ def strategy_overview(metrics: dict[str, object], output: Path) -> None:
 
 def forecast_accuracy(metrics: dict[str, object], output: Path) -> None:
     values = metrics["forecast_metrics"]
-    names = ["persistence", "hour_of_week", "p50"]
-    labels = ["Persistence", "Hour of week", "Quantile GBM P50"]
+    names = [name for name in ["persistence", "hour_of_week", "linear", "p50"] if name in values]
+    label_map = {
+        "persistence": "Persistence",
+        "hour_of_week": "Hour of week",
+        "linear": "Linear",
+        "p50": "Quantile GBM P50",
+    }
+    labels = [label_map[name] for name in names]
     x = np.arange(len(names))
     width = 0.34
     mae = [values[name]["mae"] for name in names]
@@ -113,8 +135,18 @@ def cumulative_revenue(dispatch: pd.DataFrame, output: Path) -> None:
         "hour_of_week": COLORS["cyan"],
         "ml_p50": COLORS["blue"],
         "quantile_robust": COLORS["green"],
+        "linear": COLORS["red"],
+        "zero_trade": "#98A2B3",
     }
-    for strategy, group in dispatch.groupby("strategy"):
+    selected = {
+        "perfect_foresight",
+        "persistence",
+        "linear",
+        "ml_p50",
+        "quantile_robust",
+        "zero_trade",
+    }
+    for strategy, group in dispatch[dispatch.strategy.isin(selected)].groupby("strategy"):
         hourly = group.sort_index().net_revenue_eur.cumsum()
         ax.plot(hourly.index, hourly, label=LABELS[strategy], color=palette[strategy], linewidth=2)
     ax.set_title("Cumulative realized net revenue")
@@ -128,13 +160,31 @@ def cumulative_revenue(dispatch: pd.DataFrame, output: Path) -> None:
 
 def risk_return(metrics: dict[str, object], output: Path) -> None:
     values = metrics["strategy_metrics"]
-    strategies = ["persistence", "hour_of_week", "ml_p50", "quantile_robust"]
-    palette = [COLORS["orange"], COLORS["cyan"], COLORS["blue"], COLORS["green"]]
+    strategies = [
+        name
+        for name in [
+            "persistence",
+            "hour_of_week",
+            "linear",
+            "ml_p50",
+            "quantile_robust",
+            "rule_based",
+        ]
+        if name in values
+    ]
+    palette = [
+        COLORS["orange"],
+        COLORS["cyan"],
+        COLORS["red"],
+        COLORS["blue"],
+        COLORS["green"],
+        COLORS["grey"],
+    ]
     fig, ax = plt.subplots(figsize=(8.5, 5.5))
     for strategy, color in zip(strategies, palette, strict=True):
         row = values[strategy]
         ax.scatter(
-            row["cvar_loss_eur"],
+            row.get("daily_cvar_95_loss_eur", row.get("cvar_loss_eur")),
             row["net_revenue_eur"],
             s=70 + row["throughput_mwh"] * 1.8,
             color=color,
@@ -144,12 +194,12 @@ def risk_return(metrics: dict[str, object], output: Path) -> None:
         )
         ax.annotate(
             LABELS[strategy],
-            (row["cvar_loss_eur"], row["net_revenue_eur"]),
+            (row.get("daily_cvar_95_loss_eur", row.get("cvar_loss_eur")), row["net_revenue_eur"]),
             xytext=(7, 6),
             textcoords="offset points",
         )
     ax.set_title("Risk–return trade-off for realistic strategies")
-    ax.set_xlabel("CVaR tail loss (€ per hourly interval; lower is better)")
+    ax.set_xlabel("Daily CVaR 95% tail loss (€; lower is better)")
     ax.set_ylabel("Net revenue (€; higher is better)")
     ax.text(
         0.02,
@@ -221,7 +271,7 @@ def representative_day(dispatch: pd.DataFrame, output: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--results", type=Path, default=Path("results/energy_benchmark_2024"))
+    parser.add_argument("--results", type=Path, default=Path("results/phase1_2024"))
     parser.add_argument("--output", type=Path, default=Path("docs/assets"))
     args = parser.parse_args()
     configure_style()

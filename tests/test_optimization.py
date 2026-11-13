@@ -10,7 +10,7 @@ def test_optimizer_buys_low_sells_high_and_returns_terminal_soc() -> None:
     idx = pd.date_range("2024-01-01", periods=24, freq="h", tz="UTC")
     prices = pd.Series([0.0] * 12 + [100.0] * 12, index=idx)
     config = BatteryConfig()
-    result = optimize_dispatch(prices, config)
+    result = optimize_dispatch(prices, config, terminal_soc_fraction=0.5)
     assert result.charge_mw.iloc[:12].sum() > 0
     assert result.discharge_mw.iloc[12:].sum() > 0
     assert result.soc_mwh.iloc[-1] == pytest.approx(config.initial_soc_mwh, abs=1e-5)

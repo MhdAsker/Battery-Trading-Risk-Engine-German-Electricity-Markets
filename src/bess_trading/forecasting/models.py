@@ -7,6 +7,9 @@ from dataclasses import dataclass, field
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.linear_model import Ridge
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 
 class PersistenceForecaster:
@@ -30,11 +33,30 @@ class HourOfWeekForecaster:
 
 
 @dataclass
+class LinearForecaster:
+    """Regularized linear benchmark with standardized leakage-safe inputs."""
+
+    alpha: float = 10.0
+    model: object = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.model = make_pipeline(StandardScaler(), Ridge(alpha=self.alpha))
+
+    def fit(self, x: pd.DataFrame, y: pd.Series) -> LinearForecaster:
+        self.model.fit(x, y)
+        return self
+
+    def predict(self, x: pd.DataFrame) -> pd.Series:
+        return pd.Series(self.model.predict(x), index=x.index, name="linear")
+
+
+@dataclass
 class QuantileGBM:
     """Scikit-learn quantile GBM fallback requiring no compiled optional package."""
 
     quantiles: tuple[float, ...] = (0.1, 0.5, 0.9)
     random_state: int = 42
+    max_iter: int = 250
     models: dict[float, HistGradientBoostingRegressor] = field(default_factory=dict, init=False)
 
     def fit(self, x: pd.DataFrame, y: pd.Series) -> QuantileGBM:
@@ -42,7 +64,7 @@ class QuantileGBM:
             model = HistGradientBoostingRegressor(
                 loss="quantile",
                 quantile=q,
-                max_iter=250,
+                max_iter=self.max_iter,
                 max_leaf_nodes=24,
                 learning_rate=0.06,
                 l2_regularization=1.0,

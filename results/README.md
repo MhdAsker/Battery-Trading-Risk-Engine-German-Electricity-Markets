@@ -7,3 +7,6 @@ reviewed separately; their SHA-256 hashes are recorded in each `metrics.json`.
 Results are not live trading claims. Read the experiment period, assumptions, and
 limitations before comparing strategies.
 
+- `phase1_2024`: corrected 327-day causal benchmark and primary published result.
+- `energy_benchmark_2024`: legacy 27-day pilot retained for provenance.
+

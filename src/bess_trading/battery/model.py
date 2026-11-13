@@ -5,6 +5,7 @@ from __future__ import annotations
 import pandas as pd
 
 from bess_trading.config import BatteryConfig
+from bess_trading.data.time import interval_hours
 
 
 def simulate_dispatch(
@@ -21,9 +22,10 @@ def simulate_dispatch(
     if (charge_mw > config.power_mw + 1e-8).any() or (discharge_mw > config.power_mw + 1e-8).any():
         raise ValueError("Power limit exceeded")
     soc = initial_soc_mwh if initial_soc_mwh is not None else config.initial_soc_mwh
+    dt = interval_hours(charge_mw.index)
     rows: list[float] = []
     for charge, discharge in zip(charge_mw, discharge_mw, strict=True):
-        soc += charge * config.charge_efficiency - discharge / config.discharge_efficiency
+        soc += dt * (charge * config.charge_efficiency - discharge / config.discharge_efficiency)
         if (
             soc < config.min_soc_fraction * config.energy_mwh - 1e-6
             or soc > config.max_soc_fraction * config.energy_mwh + 1e-6

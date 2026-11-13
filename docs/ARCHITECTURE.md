@@ -29,16 +29,27 @@ data/raw (immutable) -> validation -> data/processed (UTC, joined)
 - `features`: only fields available at the documented forecast issue time.
 - `forecasting`: models and rolling temporal splits; no random train/test split.
 - `battery`: independent physical schedule validation.
-- `optimization`: transparent convex programs. Forecasts determine schedules only.
+- `optimization`: interval-aware mixed-integer programs. Forecasts determine schedules only.
 - `backtesting`: realized-price settlement and strategy orchestration.
 - `metrics`: forecast accuracy, calibration, revenue, risk, and regret inputs.
 - `dashboard`: reads experiment artifacts and never trains models implicitly.
 
 ## Experiment artifact contract
 
-An experiment should save `forecasts.parquet`, `dispatch.parquet`, `metrics.json`, and
-the effective configuration. Every timestamp is UTC. Forecast rows include
+An experiment saves `forecasts.parquet`, `dispatch.parquet`, `daily_pnl.csv`,
+`metrics.json`, and the effective configuration. Every timestamp is UTC. Forecast rows include
 `forecast_issue_time_utc` so causal availability can be audited.
+
+```text
+configs/phase1.yaml -> bess-research run-phase1
+        |
+        +-- daily causal snapshots / weekly model refits
+        +-- German 23/24/25-hour delivery days
+        +-- mixed-integer interval-aware dispatch / continuous SOC
+        +-- realized settlement / daily risk / paired bootstrap
+        v
+results/phase1_2024
+```
 
 Multi-market optimization is deliberately not activated until reserve-capacity and
 activation data are ingested and their product-specific constraints are represented.

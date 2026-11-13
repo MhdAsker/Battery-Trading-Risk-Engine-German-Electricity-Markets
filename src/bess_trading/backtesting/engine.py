@@ -18,8 +18,10 @@ def settle_dispatch(
     if actual.isna().any():
         raise ValueError("Missing realized prices for dispatch timestamps")
     out["realized_price_eur_mwh"] = actual
-    out["gross_revenue_eur"] = actual * (out.discharge_mw - out.charge_mw)
-    out["throughput_mwh"] = out.charge_mw + out.discharge_mw
+    if "interval_hours" not in out:
+        raise ValueError("Dispatch must include interval_hours")
+    out["gross_revenue_eur"] = actual * (out.discharge_mw - out.charge_mw) * out.interval_hours
+    out["throughput_mwh"] = (out.charge_mw + out.discharge_mw) * out.interval_hours
     out["degradation_cost_eur"] = config.degradation_cost_eur_per_mwh * out.throughput_mwh
     out["net_revenue_eur"] = out.gross_revenue_eur - out.degradation_cost_eur
     return out
@@ -31,7 +33,10 @@ def backtest_daily(
     config: BatteryConfig,
     optimizer: Callable[..., pd.DataFrame],
 ) -> pd.DataFrame:
-    """Optimize independent UTC delivery days and concatenate settlements."""
+    """Legacy helper for independent UTC-day experiments.
+
+    New research experiments use German local delivery days and carry SOC forward.
+    """
     rows = []
     for _, prices in forecasts.groupby(forecasts.index.floor("D")):
         dispatch = optimizer(prices, config)

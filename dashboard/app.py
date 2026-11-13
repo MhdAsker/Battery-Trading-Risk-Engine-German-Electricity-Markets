@@ -5,6 +5,13 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from bess_trading.visualization.dashboard_data import (
+    cumulative_revenue,
+    select_strategy,
+    strategies,
+    strategy_revenue,
+)
+
 st.set_page_config(page_title="German BESS Trading", layout="wide")
 st.title("German BESS Trading & Risk Engine")
 page = st.sidebar.radio(
@@ -18,9 +25,13 @@ page = st.sidebar.radio(
         "Sensitivity Analysis",
     ],
 )
-artifact = Path(
-    st.sidebar.text_input("Artifact parquet", "results/energy_benchmark_2024/dispatch.parquet")
+phase1_artifact = Path("results/phase1_2024/dispatch.parquet")
+default_artifact = (
+    phase1_artifact
+    if phase1_artifact.exists()
+    else Path("results/energy_benchmark_2024/dispatch.parquet")
 )
+artifact = Path(st.sidebar.text_input("Artifact parquet", str(default_artifact)))
 
 if not artifact.exists():
     st.info(
@@ -33,9 +44,15 @@ data = pd.read_parquet(artifact)
 if not isinstance(data.index, pd.DatetimeIndex):
     st.error("Artifact must use a DatetimeIndex.")
     st.stop()
-days = data.index.tz_convert("Europe/Berlin").date if data.index.tz is not None else data.index.date
+strategy = st.sidebar.selectbox("Strategy", strategies(data))
+selected_data = select_strategy(data, strategy)
+days = (
+    selected_data.index.tz_convert("Europe/Berlin").date
+    if selected_data.index.tz is not None
+    else selected_data.index.date
+)
 selected = st.sidebar.selectbox("Delivery day", sorted(set(days)))
-day = data[pd.Series(days == selected, index=data.index)]
+day = selected_data[pd.Series(days == selected, index=selected_data.index)]
 
 if page == "Market Overview":
     cols = [
@@ -44,8 +61,11 @@ if page == "Market Overview":
         if c in day
     ]
     st.line_chart(day[cols])
-    if "realized_price_eur_mwh" in data:
-        st.metric("Negative-price intervals", int((data.realized_price_eur_mwh < 0).sum()))
+    if "realized_price_eur_mwh" in selected_data:
+        st.metric(
+            "Negative-price intervals",
+            int((selected_data.realized_price_eur_mwh < 0).sum()),
+        )
 elif page == "Forecast Explorer":
     st.line_chart(
         day[
@@ -60,13 +80,13 @@ elif page == "Battery Dispatch":
     st.line_chart(day[[c for c in ["charge_mw", "discharge_mw", "soc_mwh"] if c in day]])
 elif page == "Strategy Comparison":
     if "strategy" in data and "net_revenue_eur" in data:
-        st.bar_chart(data.groupby("strategy").net_revenue_eur.sum())
+        st.bar_chart(strategy_revenue(data))
     else:
         st.info("A multi-strategy artifact requires `strategy` and `net_revenue_eur` columns.")
 elif page == "Revenue & Risk":
     if "net_revenue_eur" in data:
-        st.line_chart(data.net_revenue_eur.cumsum())
-        st.metric("Net revenue", f"€{data.net_revenue_eur.sum():,.0f}")
+        st.line_chart(cumulative_revenue(selected_data))
+        st.metric("Net revenue", f"€{selected_data.net_revenue_eur.sum():,.0f}")
     else:
         st.info("This artifact has not been settled against realized prices.")
 else:

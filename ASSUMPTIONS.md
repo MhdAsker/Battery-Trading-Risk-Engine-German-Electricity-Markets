@@ -3,8 +3,8 @@
 ## Market
 
 - The simulated asset is a price taker in the German/Luxembourg day-ahead market.
-- Dispatch is hourly in the initial experiment. ENTSO-E sub-hourly inputs are retained
-  but must be explicitly aggregated before use.
+- The Phase 1 optimizer is interval-aware for 15-, 30-, and 60-minute products. The
+  published 2024 experiment remains hourly because its source product is hourly.
 - Scheduled volumes clear fully at the published day-ahead price. Bid curves, partial
   fills, fees, imbalance exposure, network charges, taxes, and intraday re-trading are
   outside the first milestone.
@@ -13,7 +13,8 @@
 
 ## Information timing
 
-- A forecast is treated as issued before the applicable day-ahead auction cutoff.
+- Each Phase 1 forecast has an explicit issue timestamp at 11:00 Europe/Berlin on the
+  preceding day. Models may be refitted weekly, but prediction snapshots are daily.
 - Realized load and generation are analysis variables, never predictors.
 - Fundamental predictors must be historically archived forecasts published before
   issuance. Renaming realized values to `*_forecast_mw` violates the experiment.
@@ -26,10 +27,12 @@
 - Power denotes grid-side energy per one-hour interval. Auxiliary losses and standby
   consumption are omitted.
 - Linear throughput degradation is an economic proxy, not a cell-aging model.
-- The optimizer is convex. With positive degradation and round-trip losses,
-  simultaneous charge/discharge is dominated in ordinary prices; schedules are still
-  checked for numerical artifacts.
-- Daily experiments return to 50% SOC, preventing end-of-horizon energy dumping.
+- Phase 1 uses a mixed-integer operating mode and a shared inverter constraint, so
+  charging and discharging cannot occur simultaneously even under negative prices.
+- SOC is carried continuously between German delivery days. A configurable terminal
+  energy value replaces an artificial daily reset to 50%.
+- German delivery days are constructed in Europe/Berlin and may contain 23, 24, or 25
+  hourly intervals across daylight-saving transitions.
 
 ## Risk-aware decision
 

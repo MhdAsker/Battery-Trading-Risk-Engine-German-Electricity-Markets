@@ -39,7 +39,7 @@ def trading_metrics(
         "degradation_cost_eur": float(result.degradation_cost_eur.sum()),
         "throughput_mwh": throughput,
         "equivalent_cycles": throughput / (2 * config_energy_mwh),
-        "max_drawdown_eur": float(drawdown.min()),
-        "revenue_volatility_eur": float(revenue.std()),
-        "cvar_loss_eur": float(tail.mean()) if len(tail) else 0.0,
+        "interval_max_drawdown_eur": float(drawdown.min()),
+        "interval_revenue_volatility_eur": float(revenue.std()),
+        "interval_cvar_loss_eur": float(tail.mean()) if len(tail) else 0.0,
     }

@@ -17,8 +17,9 @@ battery:
   max_equivalent_cycles_per_day: 1.5
 optimization:
   risk_aversion: 0.35
-  terminal_soc_fraction: 0.50
-  solver: CLARABEL
+  terminal_soc_fraction: null
+  terminal_value_eur_per_mwh: 50.0
+  solver: HIGHS
 forecasting:
   train_days: 365
   retrain_days: 7

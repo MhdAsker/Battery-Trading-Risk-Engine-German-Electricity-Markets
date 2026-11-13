@@ -19,6 +19,11 @@ for presentation and calendar features.
 | `charge_mw` | MW | Grid-side battery charging power | Decision |
 | `discharge_mw` | MW | Grid-side battery discharging power | Decision |
 | `soc_mwh` | MWh | Stored energy after the interval | Simulated state |
+| `soc_start_mwh` | MWh | Stored energy before the interval | Simulated state |
+| `interval_hours` | h | Market time unit used in energy accounting | Known from product |
+| `forecast_issue_time_utc` | UTC | Daily forecast snapshot timestamp | Audit field |
+| `feature_available_time_utc` | UTC | Latest input publication time | Must not exceed issue time |
+| `delivery_day_local` | date | Europe/Berlin market delivery date | Settlement grouping |
 | `gross_revenue_eur` | EUR | Realized price × (discharge − charge) | Ex-post settlement |
 | `throughput_mwh` | MWh | Charge plus discharge energy per hourly interval | Ex-post accounting |
 | `net_revenue_eur` | EUR | Gross revenue minus linear degradation cost | Ex-post settlement |
