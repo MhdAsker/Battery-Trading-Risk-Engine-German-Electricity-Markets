@@ -1,0 +1,28 @@
+seed: 42
+
+experiment:
+  # Phase 3 settlement requires authoritative 15-minute data and asset-level awarded
+  # capacity/activation records. Public clearing prices alone are insufficient.
+  market_input: data/processed/phase3_market_inputs.parquet
+  settlement_input: data/processed/phase3_asset_settlement.parquet
+  availability_input: data/processed/phase3_availability.parquet
+  provenance_manifest: data/processed/phase3_provenance.json
+  output: results/phase3
+
+battery:
+  power_mw: 1.0
+  energy_mwh: 2.0
+  min_soc_fraction: 0.10
+  max_soc_fraction: 0.90
+  initial_soc_fraction: 0.50
+  charge_efficiency: 0.95
+  discharge_efficiency: 0.95
+  degradation_cost_eur_per_mwh: 5.0
+  max_equivalent_cycles_per_day: 1.5
+
+optimization:
+  resolution_minutes: 15
+  mpc_horizon_intervals: 96
+  reserve_duration_hours: 0.25
+  transaction_fee_eur_mwh: 0.50
+  solver: HIGHS

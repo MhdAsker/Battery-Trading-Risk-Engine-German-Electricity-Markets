@@ -6,6 +6,13 @@ risk. It combines real ENTSO-E prices, rolling probabilistic forecasting, constr
 optimization, realized-price settlement, and an interactive dashboard. It does not
 claim live trading performance or fabricate balancing-market data.
 
+Phase 3 now includes a present-day 15-minute multi-market decision engine for day-ahead,
+intraday, FCR, aFRR and mFRR. It models four-hour capacity blocks, symmetric/asymmetric reserve,
+headroom, activation deliverability, MPC recourse, fees, imbalance, penalties, outages and exact
+settlement reconciliation. Reserve results remain intentionally unpublished until authoritative
+asset award and activation records are supplied; public clearing prices are not treated as proof
+of battery revenue. See [the paper-style Phase 3 report](docs/PHASE3_REPORT.md).
+
 > **Phase 1 correctness upgrade:** the current pipeline uses causal daily forecast
 > snapshots, German delivery days, interval-aware mixed-integer dispatch, continuous
 > SOC, daily P&L risk, paired bootstrap confidence intervals, and eight baselines. The
@@ -13,7 +20,7 @@ claim live trading performance or fabricate balancing-market data.
 > are generated in `results/phase1_2024`.
 
 ![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB)
-![Tests](https://img.shields.io/badge/tests-36%20passing-success)
+![Tests](https://img.shields.io/badge/tests-43%20passing-success)
 ![Market](https://img.shields.io/badge/market-DE--LU%20day--ahead-orange)
 
 ![Net battery-trading revenue by strategy](docs/assets/strategy_net_revenue.png)
@@ -223,8 +230,9 @@ streamlit run dashboard/app.py
 Docker builds the dashboard without embedding credentials. Mount data read-only or use
 the CLI outside the container to create experiment artifacts.
 
-Phase 1 CI currently enforces at least 75% package coverage; the implemented suite is
-at approximately 79% and includes a synthetic end-to-end pipeline replay.
+CI currently enforces at least 75% package coverage; the implemented suite is at approximately
+81% and includes synthetic unit fixtures plus historical Phase 1/2 experiment replays. Synthetic
+reserve fixtures validate constraints only and are never reported as market revenue.
 
 ## Future work
 
