@@ -26,6 +26,9 @@ dependencies = [
 models = ["lightgbm>=4.3,<5", "xgboost>=2.0,<3"]
 dashboard = ["plotly>=5.20,<7", "streamlit>=1.32,<2"]
 visualization = ["matplotlib>=3.8,<4"]
+kumo = [
+  "kumo-forecast @ git+https://github.com/NVIDIA/Kumo-TS.git@ad459475d1302fc8365e7117e39837a8ecb6a7e3#subdirectory=Kumo-Forecast",
+]
 dev = ["pytest>=8,<9", "pytest-cov>=5,<7", "ruff>=0.4,<1", "mypy>=1.9,<2"]
 
 [project.scripts]
@@ -33,6 +36,9 @@ bess-research = "bess_trading.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bess_trading"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

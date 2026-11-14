@@ -15,3 +15,8 @@ data/processed/*
 artifacts/*
 !artifacts/.gitkeep
 
+# NVIDIA Kumo Forecast downloads (large model artifacts; never commit).
+run8_best_model_cr.pt
+moment_head_512_6hr.pt
+standardizer.pkl
+

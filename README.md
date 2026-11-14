@@ -35,6 +35,7 @@ clearing prices alone are not treated as proof that a battery earned money.
 - [Phase 1 results](#phase-1-results-causal-energy-only-benchmark)
 - [Phase 2 results](#phase-2-results-probabilistic-forecast-value)
 - [Phase 3 engine](#phase-3-present-day-multi-market-engine)
+- [NVIDIA Kumo research extension](#nvidia-kumo-research-extension)
 - [Architecture and artifacts](#architecture-and-artifacts)
 - [Reproduction](#reproduction)
 - [Testing](#testing-and-quality-controls)
@@ -72,6 +73,27 @@ Phase 3 generalizes the software into an audited 15-minute multi-market engine. 
 energy recourse, symmetric and asymmetric reserve, product blocks, gate closures, activation
 stress, outages, fees, imbalance settlement and exact value reconciliation. Its strict
 provenance contract prevents simulated reserve awards from being presented as realized income.
+
+## NVIDIA Kumo research extension
+
+The `feature/kumo-darr-research` branch adds an optional, leakage-safe integration of NVIDIA
+Kumo Forecast, its native DARR mode, and a separately labelled electricity-regime retrieval
+experiment. The adapter preserves the 11:00 Europe/Berlin issue time, physical DST delivery
+days, continuous strategy-specific SOC, degradation accounting, and the existing deterministic
+and stochastic optimizers.
+
+The official direct checkpoint has passed a real CPU smoke test. A four-day 2023 development
+diagnostic found directional improvement from the external regime blend (MAE 34.16 vs 35.11
+EUR/MWh; net revenue EUR 788.09 vs EUR 746.00), but the sample is deliberately below the
+20-day research gate. These values are not a superiority claim, and native DARR has not yet
+been benchmarked on the CPU-only host.
+
+![Kumo development diagnostic](docs/assets/kumo_development_summary.png)
+
+See the [full Kumo research report](docs/KUMO_RESEARCH_REPORT.md), the
+[implementation plan](docs/KUMO_IMPLEMENTATION_PLAN.md), and
+[`configs/kumo_research.yaml`](configs/kumo_research.yaml) for evidence boundaries and exact
+reproduction commands.
 
 ## Research contributions
 

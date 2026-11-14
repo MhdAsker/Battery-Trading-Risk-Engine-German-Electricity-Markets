@@ -33,6 +33,10 @@ def main() -> None:
     run_phase1.add_argument("--config", default="configs/phase1.yaml")
     run_phase2 = sub.add_parser("run-phase2", help="Run the probabilistic Phase 2 experiment")
     run_phase2.add_argument("--config", default="configs/phase2.yaml")
+    run_kumo = sub.add_parser(
+        "run-kumo-diagnostic", help="Run the pre-test Kumo research feasibility diagnostic"
+    )
+    run_kumo.add_argument("--config", default="configs/kumo_research.yaml")
     args = parser.parse_args()
     logging.basicConfig(
         level=args.log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
@@ -74,6 +78,14 @@ def main() -> None:
         result = run(args.config)
         logging.getLogger(__name__).info(
             "Phase 2 completed with %s delivery days", result["experiment"]["test_days"]
+        )
+    elif args.command == "run-kumo-diagnostic":
+        from bess_trading.experiments.kumo_benchmark import run
+
+        result = run(args.config)
+        logging.getLogger(__name__).info(
+            "Kumo development gate: %s",
+            result["research_feasibility_gate"]["proceed_to_full_development"],
         )
 
 
