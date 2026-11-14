@@ -41,6 +41,12 @@ def main() -> None:
         "run-kumo-expanded", help="Run the frozen 24-origin Kumo development benchmark"
     )
     run_kumo_expanded.add_argument("--config", default="configs/kumo_development_24.yaml")
+    run_kumo_conditional = sub.add_parser(
+        "run-kumo-conditional", help="Run the pre-registered conditional Kumo study"
+    )
+    run_kumo_conditional.add_argument(
+        "--config", default="configs/kumo_conditional_research.yaml"
+    )
     args = parser.parse_args()
     logging.basicConfig(
         level=args.log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
@@ -97,6 +103,14 @@ def main() -> None:
         result = run(args.config)
         logging.getLogger(__name__).info(
             "Expanded Kumo research gate: %s", result["research_gate"]["decision"]
+        )
+    elif args.command == "run-kumo-conditional":
+        from bess_trading.experiments.kumo_conditional_benchmark import run
+
+        result = run(args.config)
+        logging.getLogger(__name__).info(
+            "Conditional Kumo supported: %s",
+            result["decision"]["conditional_policy_supported"],
         )
 
 

@@ -1,0 +1,98 @@
+seed: 42
+
+experiment:
+  inputs:
+    - data/raw/entsoe_prices_20200101_20210101.parquet
+    - data/raw/entsoe_prices_20210101_20220101.parquet
+    - data/raw/entsoe_prices_20220101_20230101.parquet
+    - data/raw/entsoe_prices_2023.parquet
+    - data/raw/entsoe_prices_2024.parquet
+  development_start: "2023-01-01"
+  development_end: "2024-01-01"
+  retrospective_validation_start: "2024-01-01"
+  retrospective_validation_end: "2025-01-01"
+  expected_development_origins: 69
+  expected_validation_origins: 44
+  spike_quantile: 0.99
+  bootstrap_samples: 2000
+  bootstrap_block_origins: [3, 7, 14]
+  cache_dir: artifacts/kumo_cache
+  retrieval_cache_dir: artifacts/kumo_retrieval_cache
+  output: results/kumo_conditional_113
+
+eligibility:
+  kumo_context_hours: 512
+  retrieval_context_hours: 168
+  maximum_forecast_steps: 512
+  require_complete_settlement: true
+  missing_value_policy: reject
+
+regimes:
+  # Frozen from the prior exploratory study; not retuned on 2024 validation outcomes.
+  negative_price_share: 0.02
+  volatility_eur_mwh: 20.0
+  residual_load_mw: null
+  renewable_share: null
+
+conditional_policy:
+  activate_on: [high_volatility, negative_price_risk]
+  fallback: kumo_direct
+
+external_retrieval:
+  context_hours: 168
+  k: 10
+  temperature: 0.10
+  minimum_regime_neighbors: 3
+  direct_weight: 0.50
+
+kumo:
+  seq_len: 512
+  model_horizon: 72
+  checkpoint: run8_best_model_cr.pt
+  standardizer: standardizer.pkl
+  model_name: AutonLab/MOMENT-1-large
+  use_cross_channel: true
+  device: null
+  seed: 42
+  batch_size: 1
+  num_workers: 0
+  alpha: 0.20
+  k: 16
+  temperature: 0.05
+  context_stride: 24
+  local_files_only: true
+
+native_darr:
+  enabled: false
+
+fine_tuning:
+  enabled: false
+
+frozen_baselines:
+  enabled: true
+  train_days: 365
+  retrain_days: 7
+  issue_hour_local: 11
+  model_max_iter: 100
+
+battery:
+  power_mw: 1.0
+  energy_mwh: 2.0
+  min_soc_fraction: 0.10
+  max_soc_fraction: 0.90
+  initial_soc_fraction: 0.50
+  charge_efficiency: 0.95
+  discharge_efficiency: 0.95
+  degradation_cost_eur_per_mwh: 5.0
+  max_equivalent_cycles_per_day: 1.5
+
+optimization:
+  terminal_value_eur_per_mwh: 50.0
+  solver: HIGHS
+
+decision_rule:
+  # Superiority is established only if the primary seven-origin paired 95% interval is positive.
+  primary_block_origins: 7
+  require_positive_revenue_ci_vs_direct: true
+  require_positive_revenue_ci_vs_always_on: true
+  conventional_comparators: [linear, quantile_gbm]
