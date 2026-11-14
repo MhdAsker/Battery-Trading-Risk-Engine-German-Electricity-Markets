@@ -216,8 +216,8 @@ def _evaluate_split(
     activated: dict[str, bool],
     settings: dict[str, Any],
 ) -> tuple[dict[str, Any], dict[str, pd.DataFrame]]:
-    index = pd.DatetimeIndex([])
-    for day in dates:
+    index = delivery_day_index(dates[0], "1h")
+    for day in dates[1:]:
         index = index.append(delivery_day_index(day, "1h"))
     forecasts = {key: value.reindex(index) for key, value in all_forecasts.items()}
     actual = prices.reindex(index)

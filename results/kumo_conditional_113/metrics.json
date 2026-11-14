@@ -1,0 +1,1730 @@
+{
+  "experiment": {
+    "name": "conditional_regime_kumo_113",
+    "config": "configs/kumo_conditional_research.yaml",
+    "development_origins": 69,
+    "validation_origins": 44,
+    "native_darr_evaluated": false,
+    "fine_tuning_evaluated": false,
+    "retrospective_validation_not_untouched": true,
+    "thresholds": {
+      "negative_price_share": 0.02,
+      "volatility_eur_mwh": 20.0,
+      "residual_load_mw": null,
+      "renewable_share": null
+    },
+    "policy": {
+      "activate_on": [
+        "high_volatility",
+        "negative_price_risk"
+      ]
+    },
+    "battery": {
+      "power_mw": 1.0,
+      "energy_mwh": 2.0,
+      "min_soc_fraction": 0.1,
+      "max_soc_fraction": 0.9,
+      "initial_soc_fraction": 0.5,
+      "charge_efficiency": 0.95,
+      "discharge_efficiency": 0.95,
+      "degradation_cost_eur_per_mwh": 5.0,
+      "max_equivalent_cycles_per_day": 1.5
+    }
+  },
+  "eligibility": {
+    "development_exclusions": {
+      "forecast_path_exceeds_limit": 223,
+      "incomplete_settlement": 7,
+      "retrieval_context_gap": 66
+    },
+    "validation_exclusions": {
+      "forecast_path_exceeds_limit": 255,
+      "incomplete_settlement": 6,
+      "retrieval_context_gap": 61
+    }
+  },
+  "development": {
+    "name": "policy_development_2023",
+    "origins": 69,
+    "hours": 1657,
+    "forecast_availability_coverage": 1.0,
+    "spike_threshold_eur_mwh": 549.9919,
+    "actual_negative_hours": 70,
+    "actual_spike_hours": 0,
+    "forecast_metrics": {
+      "kumo_direct": {
+        "mae_eur_mwh": 22.276268371093973,
+        "rmse_eur_mwh": 29.65780534981804,
+        "negative_price_precision": 0.5714285714285714,
+        "negative_price_recall": 0.05194805194805195,
+        "negative_price_f1": 0.09523809523809525,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.760582307162698,
+        "mean_charge_hour_overlap": 0.6268115942028986,
+        "mean_discharge_hour_overlap": 0.6231884057971014,
+        "mean_minimum_timing_error_hours": 4.0,
+        "mean_maximum_timing_error_hours": 4.36231884057971,
+        "mean_spread_absolute_error": 34.54832860780798,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "regime_kumo": {
+        "mae_eur_mwh": 21.389735843310156,
+        "rmse_eur_mwh": 28.54492209911078,
+        "negative_price_precision": 1.0,
+        "negative_price_recall": 0.03896103896103896,
+        "negative_price_f1": 0.07500000000000001,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.8166580869667438,
+        "mean_charge_hour_overlap": 0.6811594202898551,
+        "mean_discharge_hour_overlap": 0.7028985507246377,
+        "mean_minimum_timing_error_hours": 4.188405797101449,
+        "mean_maximum_timing_error_hours": 2.971014492753623,
+        "mean_spread_absolute_error": 33.31941273697762,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "conditional_regime_kumo": {
+        "mae_eur_mwh": 21.275930264415454,
+        "rmse_eur_mwh": 28.745049936017402,
+        "negative_price_precision": 0.0,
+        "negative_price_recall": 0.0,
+        "negative_price_f1": 0.0,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.7831403545932378,
+        "mean_charge_hour_overlap": 0.6485507246376812,
+        "mean_discharge_hour_overlap": 0.677536231884058,
+        "mean_minimum_timing_error_hours": 3.927536231884058,
+        "mean_maximum_timing_error_hours": 3.1594202898550723,
+        "mean_spread_absolute_error": 35.10748212190062,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "persistence": {
+        "mae_eur_mwh": 25.18531683765842,
+        "rmse_eur_mwh": 36.127803920435824,
+        "negative_price_precision": 0.3132530120481928,
+        "negative_price_recall": 0.33766233766233766,
+        "negative_price_f1": 0.325,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.730381029457487,
+        "mean_charge_hour_overlap": 0.6340579710144928,
+        "mean_discharge_hour_overlap": 0.5507246376811594,
+        "mean_minimum_timing_error_hours": 5.0144927536231885,
+        "mean_maximum_timing_error_hours": 4.72463768115942,
+        "mean_spread_absolute_error": 32.85144927536232,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "hour_of_week": {
+        "mae_eur_mwh": 38.60426846827902,
+        "rmse_eur_mwh": 50.19699395272458,
+        "negative_price_precision": 0.0,
+        "negative_price_recall": 0.0,
+        "negative_price_f1": 0.0,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.6621604115929344,
+        "mean_charge_hour_overlap": 0.4384057971014493,
+        "mean_discharge_hour_overlap": 0.5289855072463768,
+        "mean_minimum_timing_error_hours": 6.202898550724638,
+        "mean_maximum_timing_error_hours": 3.4057971014492754,
+        "mean_spread_absolute_error": 32.05612678465429,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "linear": {
+        "mae_eur_mwh": 23.438165949373293,
+        "rmse_eur_mwh": 31.064868498345913,
+        "negative_price_precision": 0.7575757575757576,
+        "negative_price_recall": 0.3246753246753247,
+        "negative_price_f1": 0.45454545454545453,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.792931606127048,
+        "mean_charge_hour_overlap": 0.6992753623188406,
+        "mean_discharge_hour_overlap": 0.6340579710144928,
+        "mean_minimum_timing_error_hours": 4.159420289855072,
+        "mean_maximum_timing_error_hours": 3.753623188405797,
+        "mean_spread_absolute_error": 30.830177262559758,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "quantile_gbm": {
+        "mae_eur_mwh": 22.574891009920325,
+        "rmse_eur_mwh": 31.970282551096187,
+        "negative_price_precision": 1.0,
+        "negative_price_recall": 0.12987012987012986,
+        "negative_price_f1": 0.22988505747126434,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.7713878574829136,
+        "mean_charge_hour_overlap": 0.5688405797101449,
+        "mean_discharge_hour_overlap": 0.6340579710144928,
+        "mean_minimum_timing_error_hours": 5.043478260869565,
+        "mean_maximum_timing_error_hours": 4.0,
+        "mean_spread_absolute_error": 37.69568551547069,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      }
+    },
+    "strategy_metrics": {
+      "conditional_regime_kumo": {
+        "gross_revenue_eur": 9448.197120347828,
+        "net_revenue_eur": 7599.367341954475,
+        "degradation_cost_eur": 1848.829778393352,
+        "throughput_mwh": 369.76595567867037,
+        "equivalent_cycles": 92.44148891966759,
+        "interval_max_drawdown_eur": -204.90947368421075,
+        "interval_revenue_volatility_eur": 43.20712921182481,
+        "interval_cvar_loss_eur": 91.21394419784401,
+        "daily_mean_eur": 110.13575857905035,
+        "daily_volatility_eur": 66.67635402197921,
+        "loss_probability": 0.028985507246376812,
+        "downside_deviation_eur": 4.21563807304227,
+        "daily_var_95_loss_eur": -26.776932105263178,
+        "daily_cvar_95_loss_eur": -0.7518752550087182,
+        "maximum_drawdown_eur": -28.67453312123962,
+        "mean_loss_eur": 24.387289586935484,
+        "revenue_per_equivalent_cycle_eur": 82.20732304039788,
+        "regret_vs_perfect_eur": 1351.527527863086,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 6.941732888916707,
+          "ci_lower_eur": 1.6677610283961226,
+          "ci_upper_eur": 13.2953346590688,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.42195777339826956,
+          "probability_of_improvement": 1.0
+        }
+      },
+      "hour_of_week": {
+        "gross_revenue_eur": 8478.022056490769,
+        "net_revenue_eur": 6647.832582806557,
+        "degradation_cost_eur": 1830.1894736842105,
+        "throughput_mwh": 366.0378947368421,
+        "equivalent_cycles": 91.50947368421052,
+        "interval_max_drawdown_eur": -207.92473476727355,
+        "interval_revenue_volatility_eur": 42.450565243265814,
+        "interval_cvar_loss_eur": 90.14180086276359,
+        "daily_mean_eur": 96.34539975081968,
+        "daily_volatility_eur": 61.57889272494086,
+        "loss_probability": 0.043478260869565216,
+        "downside_deviation_eur": 3.749118157070588,
+        "daily_var_95_loss_eur": -9.490066776402248,
+        "daily_cvar_95_loss_eur": 9.57250279410747,
+        "maximum_drawdown_eur": -24.998863157894448,
+        "mean_loss_eur": 15.712501971090662,
+        "revenue_per_equivalent_cycle_eur": 72.64638638123438,
+        "regret_vs_perfect_eur": 2303.0622870110037,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": -6.848625939313988,
+          "ci_lower_eur": -16.386110293273003,
+          "ci_upper_eur": 5.100798281138993,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": -0.17409992468042726,
+          "probability_of_improvement": 0.125
+        }
+      },
+      "kumo_direct": {
+        "gross_revenue_eur": 9004.276830790968,
+        "net_revenue_eur": 7120.38777261922,
+        "degradation_cost_eur": 1883.8890581717453,
+        "throughput_mwh": 376.77781163434906,
+        "equivalent_cycles": 94.19445290858727,
+        "interval_max_drawdown_eur": -204.90947368421075,
+        "interval_revenue_volatility_eur": 42.979070029187525,
+        "interval_cvar_loss_eur": 91.97275840202917,
+        "daily_mean_eur": 103.19402569013366,
+        "daily_volatility_eur": 64.54612000183778,
+        "loss_probability": 0.028985507246376812,
+        "downside_deviation_eur": 3.5904739181967416,
+        "daily_var_95_loss_eur": -26.776932105263178,
+        "daily_cvar_95_loss_eur": -1.0605467105263084,
+        "maximum_drawdown_eur": -22.034106578947103,
+        "mean_loss_eur": 21.06707631578949,
+        "revenue_per_equivalent_cycle_eur": 75.5924319612465,
+        "regret_vs_perfect_eur": 1830.5070971983405,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 0.0,
+          "ci_lower_eur": 0.0,
+          "ci_upper_eur": 0.0,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.0,
+          "probability_of_improvement": 0.0
+        }
+      },
+      "linear": {
+        "gross_revenue_eur": 9122.002235526135,
+        "net_revenue_eur": 7434.652616412561,
+        "degradation_cost_eur": 1687.3496191135735,
+        "throughput_mwh": 337.4699238227147,
+        "equivalent_cycles": 84.36748095567867,
+        "interval_max_drawdown_eur": -182.75263157894733,
+        "interval_revenue_volatility_eur": 40.94886721638304,
+        "interval_cvar_loss_eur": 86.27093849080534,
+        "daily_mean_eur": 107.74858864366031,
+        "daily_volatility_eur": 66.13062199020173,
+        "loss_probability": 0.028985507246376812,
+        "downside_deviation_eur": 4.350806106388761,
+        "daily_var_95_loss_eur": -25.02559977839339,
+        "daily_cvar_95_loss_eur": 2.3969186181616955,
+        "maximum_drawdown_eur": -35.824610526316064,
+        "mean_loss_eur": 20.296300394218136,
+        "revenue_per_equivalent_cycle_eur": 88.12225435909667,
+        "regret_vs_perfect_eur": 1516.2422534050002,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 4.554562953526658,
+          "ci_lower_eur": -3.4077107131023987,
+          "ci_upper_eur": 12.859640429754077,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.1405589465559684,
+          "probability_of_improvement": 0.8695
+        }
+      },
+      "perfect_foresight": {
+        "gross_revenue_eur": 10701.692307490692,
+        "net_revenue_eur": 8950.89486981756,
+        "degradation_cost_eur": 1750.7974376731304,
+        "throughput_mwh": 350.159487534626,
+        "equivalent_cycles": 87.5398718836565,
+        "interval_max_drawdown_eur": -185.58894736842103,
+        "interval_revenue_volatility_eur": 42.69452169638601,
+        "interval_cvar_loss_eur": 84.99613823715917,
+        "daily_mean_eur": 129.72311405532696,
+        "daily_volatility_eur": 66.63396179234886,
+        "loss_probability": 0.014492753623188406,
+        "downside_deviation_eur": 1.9520889676762387,
+        "daily_var_95_loss_eur": -45.508578947368434,
+        "daily_cvar_95_loss_eur": -22.54492753648247,
+        "maximum_drawdown_eur": -16.21526880143847,
+        "mean_loss_eur": 16.215268801438555,
+        "revenue_per_equivalent_cycle_eur": 102.2493485221638,
+        "regret_vs_perfect_eur": 0.0,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 26.52908836519333,
+          "ci_lower_eur": 19.86646454215582,
+          "ci_upper_eur": 34.256865301510935,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.7202561122606775,
+          "probability_of_improvement": 1.0
+        }
+      },
+      "persistence": {
+        "gross_revenue_eur": 8643.519121682544,
+        "net_revenue_eur": 6929.223657693625,
+        "degradation_cost_eur": 1714.2954639889197,
+        "throughput_mwh": 342.85909279778394,
+        "equivalent_cycles": 85.71477319944599,
+        "interval_max_drawdown_eur": -188.99834705028024,
+        "interval_revenue_volatility_eur": 41.22898052336541,
+        "interval_cvar_loss_eur": 87.38148383005708,
+        "daily_mean_eur": 100.4235312709221,
+        "daily_volatility_eur": 76.28986279581186,
+        "loss_probability": 0.057971014492753624,
+        "downside_deviation_eur": 10.998318950473355,
+        "daily_var_95_loss_eur": 7.346117105263017,
+        "daily_cvar_95_loss_eur": 38.239032294332254,
+        "maximum_drawdown_eur": -79.26484011342382,
+        "mean_loss_eur": 38.239032294332254,
+        "revenue_per_equivalent_cycle_eur": 80.84048290684169,
+        "regret_vs_perfect_eur": 2021.6712121239361,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": -2.7704944192115524,
+          "ci_lower_eur": -12.391477825731261,
+          "ci_upper_eur": 7.283403273909868,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": -0.06251403395164239,
+          "probability_of_improvement": 0.283
+        }
+      },
+      "quantile_gbm": {
+        "gross_revenue_eur": 8670.717622581911,
+        "net_revenue_eur": 6990.581265241191,
+        "degradation_cost_eur": 1680.1363573407202,
+        "throughput_mwh": 336.027271468144,
+        "equivalent_cycles": 84.006817867036,
+        "interval_max_drawdown_eur": -194.59315789473658,
+        "interval_revenue_volatility_eur": 41.662013987262846,
+        "interval_cvar_loss_eur": 88.04351934051998,
+        "daily_mean_eur": 101.31277196001729,
+        "daily_volatility_eur": 67.24393303333414,
+        "loss_probability": 0.028985507246376812,
+        "downside_deviation_eur": 6.432814812920945,
+        "daily_var_95_loss_eur": -5.626105390414292,
+        "daily_cvar_95_loss_eur": 17.70812242504669,
+        "maximum_drawdown_eur": -39.92223026315787,
+        "mean_loss_eur": 37.71999934210527,
+        "revenue_per_equivalent_cycle_eur": 83.21445143066504,
+        "regret_vs_perfect_eur": 1960.3136045763695,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": -1.8812537301163852,
+          "ci_lower_eur": -10.392861576834344,
+          "ci_upper_eur": 8.091457806107098,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": -0.052076694081713046,
+          "probability_of_improvement": 0.333
+        }
+      },
+      "regime_kumo": {
+        "gross_revenue_eur": 9644.86810217366,
+        "net_revenue_eur": 7770.523226827401,
+        "degradation_cost_eur": 1874.3448753462603,
+        "throughput_mwh": 374.8689750692521,
+        "equivalent_cycles": 93.71724376731302,
+        "interval_max_drawdown_eur": -207.92473476727355,
+        "interval_revenue_volatility_eur": 43.48146094019055,
+        "interval_cvar_loss_eur": 90.5239631963083,
+        "daily_mean_eur": 112.61627864967245,
+        "daily_volatility_eur": 65.86598500505143,
+        "loss_probability": 0.028985507246376812,
+        "downside_deviation_eur": 4.21563807304227,
+        "daily_var_95_loss_eur": -27.78121684210527,
+        "daily_cvar_95_loss_eur": -0.9968640707981891,
+        "maximum_drawdown_eur": -28.67453312123962,
+        "mean_loss_eur": 24.387289586935484,
+        "revenue_per_equivalent_cycle_eur": 82.91455141511138,
+        "regret_vs_perfect_eur": 1180.3716429901597,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 9.42225295953882,
+          "ci_lower_eur": 3.368653811969392,
+          "ci_upper_eur": 15.924352803259147,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.5029587433281825,
+          "probability_of_improvement": 0.9995
+        }
+      },
+      "zero_trade": {
+        "gross_revenue_eur": 0.0,
+        "net_revenue_eur": 0.0,
+        "degradation_cost_eur": 0.0,
+        "throughput_mwh": 0.0,
+        "equivalent_cycles": 0.0,
+        "interval_max_drawdown_eur": 0.0,
+        "interval_revenue_volatility_eur": 0.0,
+        "interval_cvar_loss_eur": 0.0,
+        "daily_mean_eur": 0.0,
+        "daily_volatility_eur": 0.0,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -0.0,
+        "daily_cvar_95_loss_eur": 0.0,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 0.0,
+        "regret_vs_perfect_eur": 8950.89486981756,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": -103.19402569013366,
+          "ci_lower_eur": -126.04078130599649,
+          "ci_upper_eur": -83.01067597893619,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": -1.5987641966270862,
+          "probability_of_improvement": 0.0
+        }
+      }
+    },
+    "paired_comparisons": {
+      "conditional_regime_kumo_vs_kumo_direct": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 6.941732888916707,
+            "ci_lower_eur": 2.5138710889074796,
+            "ci_upper_eur": 12.029160125754295,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.42195777339826956,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.000942175583514,
+            "ci_lower_eur": -0.10784931271010302,
+            "ci_upper_eur": 2.1960711999215166,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.21156504869637136,
+            "probability_of_improvement": 0.962
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 6.941732888916707,
+            "ci_lower_eur": 1.6677610283961226,
+            "ci_upper_eur": 13.2953346590688,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.42195777339826956,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.000942175583514,
+            "ci_lower_eur": -0.2530073770092837,
+            "ci_upper_eur": 2.3550579977612864,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.21156504869637136,
+            "probability_of_improvement": 0.936
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 6.941732888916707,
+            "ci_lower_eur": 1.0048712900969377,
+            "ci_upper_eur": 13.361177832284612,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.42195777339826956,
+            "probability_of_improvement": 0.999
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.000942175583514,
+            "ci_lower_eur": -0.3053695406661197,
+            "ci_upper_eur": 2.414796368200225,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.21156504869637136,
+            "probability_of_improvement": 0.9285
+          }
+        }
+      },
+      "conditional_regime_kumo_vs_regime_kumo": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": -2.4805200706221116,
+            "ci_lower_eur": -5.285313256340893,
+            "ci_upper_eur": -0.2124587324682495,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.23105801070444298,
+            "probability_of_improvement": 0.016
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.12509057415148436,
+            "ci_lower_eur": -1.2366226286527127,
+            "ci_upper_eur": 1.4476598900025708,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.019439729834861405,
+            "probability_of_improvement": 0.5855
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": -2.4805200706221116,
+            "ci_lower_eur": -4.986409474862349,
+            "ci_upper_eur": -0.2417941378333359,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.23105801070444298,
+            "probability_of_improvement": 0.012
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.12509057415148436,
+            "ci_lower_eur": -1.243302724967668,
+            "ci_upper_eur": 1.379762233806661,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.019439729834861405,
+            "probability_of_improvement": 0.5705
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": -2.4805200706221116,
+            "ci_lower_eur": -5.074324055945246,
+            "ci_upper_eur": -0.06822007792807418,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.23105801070444298,
+            "probability_of_improvement": 0.022
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.12509057415148436,
+            "ci_lower_eur": -1.2598001101558869,
+            "ci_upper_eur": 1.4633174131157705,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.019439729834861405,
+            "probability_of_improvement": 0.5555
+          }
+        }
+      },
+      "conditional_regime_kumo_vs_linear": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 2.3871699353900495,
+            "ci_lower_eur": -4.492527651117054,
+            "ci_upper_eur": 8.268587209849661,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.07847149271235396,
+            "probability_of_improvement": 0.7785
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 2.167559940695695,
+            "ci_lower_eur": -0.8365868197808319,
+            "ci_upper_eur": 5.211253207003941,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.18119809396622166,
+            "probability_of_improvement": 0.916
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 2.3871699353900495,
+            "ci_lower_eur": -3.8636301855968287,
+            "ci_upper_eur": 8.353174240318232,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.07847149271235396,
+            "probability_of_improvement": 0.7895
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 2.167559940695695,
+            "ci_lower_eur": -0.7812096719067707,
+            "ci_upper_eur": 5.195197878721009,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.18119809396622166,
+            "probability_of_improvement": 0.92
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 2.3871699353900495,
+            "ci_lower_eur": -4.659106522121274,
+            "ci_upper_eur": 8.202049906225119,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.07847149271235396,
+            "probability_of_improvement": 0.7715
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 2.167559940695695,
+            "ci_lower_eur": -0.9198826725163821,
+            "ci_upper_eur": 5.094139234098814,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.18119809396622166,
+            "probability_of_improvement": 0.9195
+          }
+        }
+      },
+      "conditional_regime_kumo_vs_quantile_gbm": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 8.82298661903309,
+            "ci_lower_eur": 2.3978740694203724,
+            "ci_upper_eur": 15.074865926723387,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.27216913185810154,
+            "probability_of_improvement": 0.9955
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.301301779605169,
+            "ci_lower_eur": -1.2893142950284358,
+            "ci_upper_eur": 4.160139795846392,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.11627327999304216,
+            "probability_of_improvement": 0.819
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 8.82298661903309,
+            "ci_lower_eur": 1.4094126762003116,
+            "ci_upper_eur": 15.359527385381043,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.27216913185810154,
+            "probability_of_improvement": 0.9945
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.301301779605169,
+            "ci_lower_eur": -1.3857066619060696,
+            "ci_upper_eur": 3.892475784201253,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.11627327999304216,
+            "probability_of_improvement": 0.8075
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 8.82298661903309,
+            "ci_lower_eur": 0.8582538515820137,
+            "ci_upper_eur": 15.56508675512036,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.27216913185810154,
+            "probability_of_improvement": 0.9835
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.301301779605169,
+            "ci_lower_eur": -1.0698519700183393,
+            "ci_upper_eur": 3.7343177691826552,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.11627327999304216,
+            "probability_of_improvement": 0.8615
+          }
+        }
+      },
+      "regime_kumo_vs_kumo_direct": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 9.42225295953882,
+            "ci_lower_eur": 4.761191593032441,
+            "ci_upper_eur": 14.574775434382763,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.5029587433281825,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.8758516014320294,
+            "ci_lower_eur": -1.0034490353031003,
+            "ci_upper_eur": 2.650149186004823,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.10944363994331728,
+            "probability_of_improvement": 0.8205
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 9.42225295953882,
+            "ci_lower_eur": 3.368653811969392,
+            "ci_upper_eur": 15.924352803259147,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.5029587433281825,
+            "probability_of_improvement": 0.9995
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.8758516014320294,
+            "ci_lower_eur": -1.0965232695470328,
+            "ci_upper_eur": 2.8861067025197835,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.10944363994331728,
+            "probability_of_improvement": 0.794
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 9.42225295953882,
+            "ci_lower_eur": 2.903966743367706,
+            "ci_upper_eur": 16.618287155000143,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.5029587433281825,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.8758516014320294,
+            "ci_lower_eur": -1.1897512970649138,
+            "ci_upper_eur": 2.9134947970282985,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.10944363994331728,
+            "probability_of_improvement": 0.8015
+          }
+        }
+      }
+    },
+    "activation_diagnostics": {
+      "activation_frequency": 0.4782608695652174,
+      "mae_true_positive": 21,
+      "mae_false_positive": 12,
+      "mae_missed_opportunity": 21,
+      "revenue_true_positive": 23,
+      "revenue_false_positive": 10,
+      "revenue_missed_opportunity": 19
+    },
+    "regime_summary": {
+      "all": {
+        "origins": 69,
+        "activation_rate": 0.4782608695652174,
+        "always_mae_improvement_eur_mwh": 0.8758516014320294,
+        "conditional_mae_improvement_eur_mwh": 1.000942175583514,
+        "always_revenue_improvement_eur": 9.42225295953882,
+        "conditional_revenue_improvement_eur": 6.941732888916707
+      },
+      "high_volatility": {
+        "origins": 9,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": 5.8568907544813245,
+        "conditional_mae_improvement_eur_mwh": 5.8568907544813245,
+        "always_revenue_improvement_eur": 32.776218872348885,
+        "conditional_revenue_improvement_eur": 32.776218872348885
+      },
+      "negative_price_risk": {
+        "origins": 33,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": 2.092879094401893,
+        "conditional_mae_improvement_eur_mwh": 2.092879094401893,
+        "always_revenue_improvement_eur": 14.546253336484186,
+        "conditional_revenue_improvement_eur": 14.546253336484186
+      },
+      "overlap": {
+        "origins": 9,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": 5.8568907544813245,
+        "conditional_mae_improvement_eur_mwh": 5.8568907544813245,
+        "always_revenue_improvement_eur": 32.776218872348885,
+        "conditional_revenue_improvement_eur": 32.776218872348885
+      },
+      "ordinary": {
+        "origins": 36,
+        "activation_rate": 0.0,
+        "always_mae_improvement_eur_mwh": -0.23975693379034502,
+        "conditional_mae_improvement_eur_mwh": 0.0,
+        "always_revenue_improvement_eur": 4.725252614005565,
+        "conditional_revenue_improvement_eur": -0.02907752135348258
+      },
+      "activated": {
+        "origins": 33,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": 2.092879094401893,
+        "conditional_mae_improvement_eur_mwh": 2.092879094401893,
+        "always_revenue_improvement_eur": 14.546253336484186,
+        "conditional_revenue_improvement_eur": 14.546253336484186
+      },
+      "weekend": {
+        "origins": 17,
+        "activation_rate": 0.47058823529411764,
+        "always_mae_improvement_eur_mwh": 3.3657480412765883,
+        "conditional_mae_improvement_eur_mwh": 0.13597422266082634,
+        "always_revenue_improvement_eur": 10.817611840515418,
+        "conditional_revenue_improvement_eur": 9.61498618521422
+      },
+      "weekday": {
+        "origins": 52,
+        "activation_rate": 0.4807692307692308,
+        "always_mae_improvement_eur_mwh": 0.06184699609823166,
+        "conditional_mae_improvement_eur_mwh": 1.2837201601928543,
+        "always_revenue_improvement_eur": 8.966077940758009,
+        "conditional_revenue_improvement_eur": 6.067784695896366
+      }
+    },
+    "physical_verification": {
+      "simultaneous_charge_discharge_intervals": 0,
+      "max_shared_inverter_excess_mw": 1.9984014443252818e-15,
+      "max_soc_below_minimum_mwh": 5.551115123125783e-17,
+      "max_soc_above_maximum_mwh": 0.0,
+      "maximum_daily_efc": 1.5000000000000002,
+      "configured_daily_efc_limit": 1.5
+    }
+  },
+  "validation": {
+    "name": "retrospective_validation_2024",
+    "origins": 44,
+    "hours": 1056,
+    "forecast_availability_coverage": 1.0,
+    "spike_threshold_eur_mwh": 527.7982000000003,
+    "actual_negative_hours": 68,
+    "actual_spike_hours": 0,
+    "forecast_metrics": {
+      "kumo_direct": {
+        "mae_eur_mwh": 23.49068136347966,
+        "rmse_eur_mwh": 32.42614367908549,
+        "negative_price_precision": 0.5714285714285714,
+        "negative_price_recall": 0.05333333333333334,
+        "negative_price_f1": 0.0975609756097561,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.782387207188139,
+        "mean_charge_hour_overlap": 0.6875,
+        "mean_discharge_hour_overlap": 0.6306818181818182,
+        "mean_minimum_timing_error_hours": 2.75,
+        "mean_maximum_timing_error_hours": 4.136363636363637,
+        "mean_spread_absolute_error": 44.4015882966735,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "regime_kumo": {
+        "mae_eur_mwh": 22.42873923711818,
+        "rmse_eur_mwh": 30.621038378929967,
+        "negative_price_precision": 0.5,
+        "negative_price_recall": 0.04,
+        "negative_price_f1": 0.07407407407407407,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.8321638759999829,
+        "mean_charge_hour_overlap": 0.6704545454545454,
+        "mean_discharge_hour_overlap": 0.6875,
+        "mean_minimum_timing_error_hours": 3.3181818181818183,
+        "mean_maximum_timing_error_hours": 4.136363636363637,
+        "mean_spread_absolute_error": 38.00209482362018,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "conditional_regime_kumo": {
+        "mae_eur_mwh": 22.87168672856052,
+        "rmse_eur_mwh": 31.140671875610288,
+        "negative_price_precision": 0.5,
+        "negative_price_recall": 0.04,
+        "negative_price_f1": 0.07407407407407407,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.8380341245472702,
+        "mean_charge_hour_overlap": 0.7159090909090909,
+        "mean_discharge_hour_overlap": 0.6931818181818182,
+        "mean_minimum_timing_error_hours": 2.659090909090909,
+        "mean_maximum_timing_error_hours": 3.5454545454545454,
+        "mean_spread_absolute_error": 43.154768391373345,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "persistence": {
+        "mae_eur_mwh": 25.140530303030303,
+        "rmse_eur_mwh": 37.74671977520535,
+        "negative_price_precision": 0.44776119402985076,
+        "negative_price_recall": 0.4,
+        "negative_price_f1": 0.4225352112676056,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.7632315734325115,
+        "mean_charge_hour_overlap": 0.625,
+        "mean_discharge_hour_overlap": 0.6420454545454546,
+        "mean_minimum_timing_error_hours": 3.6818181818181817,
+        "mean_maximum_timing_error_hours": 4.2727272727272725,
+        "mean_spread_absolute_error": 43.183181818181815,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "hour_of_week": {
+        "mae_eur_mwh": 41.50517189585006,
+        "rmse_eur_mwh": 50.96396362758474,
+        "negative_price_precision": 0.0,
+        "negative_price_recall": 0.0,
+        "negative_price_f1": 0.0,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.7068550620137187,
+        "mean_charge_hour_overlap": 0.32386363636363635,
+        "mean_discharge_hour_overlap": 0.6420454545454546,
+        "mean_minimum_timing_error_hours": 7.454545454545454,
+        "mean_maximum_timing_error_hours": 4.7272727272727275,
+        "mean_spread_absolute_error": 53.86020476412412,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "linear": {
+        "mae_eur_mwh": 21.163604508133766,
+        "rmse_eur_mwh": 29.306388601065418,
+        "negative_price_precision": 0.5714285714285714,
+        "negative_price_recall": 0.05333333333333334,
+        "negative_price_f1": 0.0975609756097561,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.8333616518733625,
+        "mean_charge_hour_overlap": 0.6875,
+        "mean_discharge_hour_overlap": 0.7045454545454546,
+        "mean_minimum_timing_error_hours": 3.022727272727273,
+        "mean_maximum_timing_error_hours": 3.6136363636363638,
+        "mean_spread_absolute_error": 39.011892419285324,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      },
+      "quantile_gbm": {
+        "mae_eur_mwh": 20.550183906914555,
+        "rmse_eur_mwh": 28.983101781950936,
+        "negative_price_precision": 0.7647058823529411,
+        "negative_price_recall": 0.17333333333333334,
+        "negative_price_f1": 0.2826086956521739,
+        "spike_precision": 0.0,
+        "spike_recall": 0.0,
+        "spike_f1": 0.0,
+        "mean_rank_correlation": 0.8505603981866066,
+        "mean_charge_hour_overlap": 0.6477272727272727,
+        "mean_discharge_hour_overlap": 0.7102272727272727,
+        "mean_minimum_timing_error_hours": 3.0454545454545454,
+        "mean_maximum_timing_error_hours": 3.659090909090909,
+        "mean_spread_absolute_error": 40.33094084541091,
+        "mean_false_arbitrage": 0.0,
+        "mean_missed_arbitrage": 0.0
+      }
+    },
+    "strategy_metrics": {
+      "conditional_regime_kumo": {
+        "gross_revenue_eur": 7645.723003829886,
+        "net_revenue_eur": 6472.213585547339,
+        "degradation_cost_eur": 1173.5094182825485,
+        "throughput_mwh": 234.70188365650972,
+        "equivalent_cycles": 58.67547091412743,
+        "interval_max_drawdown_eur": -154.77833183484336,
+        "interval_revenue_volatility_eur": 41.80388158035187,
+        "interval_cvar_loss_eur": 78.2861881416158,
+        "daily_mean_eur": 147.09576330789406,
+        "daily_volatility_eur": 86.1455535636517,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -38.02178156857322,
+        "daily_cvar_95_loss_eur": -36.07304185076254,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 110.30526870452451,
+        "regret_vs_perfect_eur": 1101.2790118747744,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 11.835749975421345,
+          "ci_lower_eur": 5.448222898496032,
+          "ci_upper_eur": 18.274185407607856,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.5384573234825883,
+          "probability_of_improvement": 1.0
+        }
+      },
+      "hour_of_week": {
+        "gross_revenue_eur": 7187.533209516564,
+        "net_revenue_eur": 5989.543735832353,
+        "degradation_cost_eur": 1197.9894736842107,
+        "throughput_mwh": 239.5978947368421,
+        "equivalent_cycles": 59.89947368421053,
+        "interval_max_drawdown_eur": -166.60947368421057,
+        "interval_revenue_volatility_eur": 40.41065189635629,
+        "interval_cvar_loss_eur": 76.21786494538233,
+        "daily_mean_eur": 136.12599399618986,
+        "daily_volatility_eur": 74.40912713695543,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -42.91492978352582,
+        "daily_cvar_95_loss_eur": -39.65795422458907,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 99.99326150024578,
+        "regret_vs_perfect_eur": 1583.9488615897599,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 0.8659806637171648,
+          "ci_lower_eur": -14.991739120277222,
+          "ci_upper_eur": 13.837117156097841,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.02255537902431134,
+          "probability_of_improvement": 0.565
+        }
+      },
+      "kumo_direct": {
+        "gross_revenue_eur": 7076.939443969519,
+        "net_revenue_eur": 5951.440586628798,
+        "degradation_cost_eur": 1125.4988573407204,
+        "throughput_mwh": 225.09977146814407,
+        "equivalent_cycles": 56.27494286703602,
+        "interval_max_drawdown_eur": -167.51851458088458,
+        "interval_revenue_volatility_eur": 40.53078940831915,
+        "interval_cvar_loss_eur": 77.21093517874877,
+        "daily_mean_eur": 135.26001333247268,
+        "daily_volatility_eur": 82.26007400368086,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -35.44055649681857,
+        "daily_cvar_95_loss_eur": -23.108526280056264,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 105.75649273763996,
+        "regret_vs_perfect_eur": 1622.0520107933153,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 0.0,
+          "ci_lower_eur": 0.0,
+          "ci_upper_eur": 0.0,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.0,
+          "probability_of_improvement": 0.0
+        }
+      },
+      "linear": {
+        "gross_revenue_eur": 7654.617084355402,
+        "net_revenue_eur": 6460.975533108864,
+        "degradation_cost_eur": 1193.6415512465376,
+        "throughput_mwh": 238.72831024930747,
+        "equivalent_cycles": 59.68207756232687,
+        "interval_max_drawdown_eur": -167.6596618023375,
+        "interval_revenue_volatility_eur": 41.75025635474803,
+        "interval_cvar_loss_eur": 77.29872889771599,
+        "daily_mean_eur": 146.84035302520147,
+        "daily_volatility_eur": 72.92229142479185,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -39.61020303617125,
+        "daily_cvar_95_loss_eur": -36.45684454895453,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 108.25654529806829,
+        "regret_vs_perfect_eur": 1112.5170643132496,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 11.580339692728755,
+          "ci_lower_eur": 1.3175635821908576,
+          "ci_upper_eur": 22.65283273796854,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.27062191004709646,
+          "probability_of_improvement": 0.9865
+        }
+      },
+      "perfect_foresight": {
+        "gross_revenue_eur": 8745.15575531685,
+        "net_revenue_eur": 7573.492597422113,
+        "degradation_cost_eur": 1171.6631578947367,
+        "throughput_mwh": 234.33263157894737,
+        "equivalent_cycles": 58.58315789473684,
+        "interval_max_drawdown_eur": -150.871052631579,
+        "interval_revenue_volatility_eur": 42.375298410123044,
+        "interval_cvar_loss_eur": 72.90426017874877,
+        "daily_mean_eur": 172.12483175959346,
+        "daily_volatility_eur": 93.69405827483213,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -53.72355030638358,
+        "daily_cvar_95_loss_eur": -47.12787648753948,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 129.27764343175707,
+        "regret_vs_perfect_eur": 0.0,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 36.864818427120774,
+          "ci_lower_eur": 27.181971564192523,
+          "ci_upper_eur": 47.91358983297859,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.8136684279345178,
+          "probability_of_improvement": 1.0
+        }
+      },
+      "persistence": {
+        "gross_revenue_eur": 7291.331556552284,
+        "net_revenue_eur": 6122.209118879155,
+        "degradation_cost_eur": 1169.1224376731302,
+        "throughput_mwh": 233.82448753462606,
+        "equivalent_cycles": 58.456121883656515,
+        "interval_max_drawdown_eur": -167.6596618023375,
+        "interval_revenue_volatility_eur": 40.950860421806496,
+        "interval_cvar_loss_eur": 76.90875868917578,
+        "daily_mean_eur": 139.1411163381626,
+        "daily_volatility_eur": 78.4779886434974,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -34.83288975447818,
+        "daily_cvar_95_loss_eur": -18.97056069636712,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 104.73170168667716,
+        "regret_vs_perfect_eur": 1451.2834785429586,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 3.8811030056899067,
+          "ci_lower_eur": -10.93653224462468,
+          "ci_upper_eur": 19.207897994959858,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.05201657665761569,
+          "probability_of_improvement": 0.7225
+        }
+      },
+      "quantile_gbm": {
+        "gross_revenue_eur": 7828.234458001572,
+        "net_revenue_eur": 6621.641625591601,
+        "degradation_cost_eur": 1206.5928324099723,
+        "throughput_mwh": 241.31856648199442,
+        "equivalent_cycles": 60.329641620498606,
+        "interval_max_drawdown_eur": -151.6384210526312,
+        "interval_revenue_volatility_eur": 42.37731604115284,
+        "interval_cvar_loss_eur": 77.75422045680239,
+        "daily_mean_eur": 150.49185512708183,
+        "daily_volatility_eur": 86.00776127132384,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -33.90388955944394,
+        "daily_cvar_95_loss_eur": -21.97903843972613,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 109.75768209008756,
+        "regret_vs_perfect_eur": 951.8509718305122,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 15.23184179460914,
+          "ci_lower_eur": 5.77602632347263,
+          "ci_upper_eur": 27.339486704412877,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.38841104611124155,
+          "probability_of_improvement": 1.0
+        }
+      },
+      "regime_kumo": {
+        "gross_revenue_eur": 7769.817174840475,
+        "net_revenue_eur": 6550.062465699202,
+        "degradation_cost_eur": 1219.7547091412741,
+        "throughput_mwh": 243.95094182825486,
+        "equivalent_cycles": 60.987735457063714,
+        "interval_max_drawdown_eur": -154.77833183484336,
+        "interval_revenue_volatility_eur": 42.15422782925467,
+        "interval_cvar_loss_eur": 78.2473003561143,
+        "daily_mean_eur": 148.86505603861823,
+        "daily_volatility_eur": 84.84163075139301,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -37.990047335223736,
+        "daily_cvar_95_loss_eur": -36.63228968832623,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 107.39966677907799,
+        "regret_vs_perfect_eur": 1023.430131722911,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": 13.605042706145513,
+          "ci_lower_eur": 8.927887986417982,
+          "ci_upper_eur": 18.981811786211573,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": 0.6228720479092418,
+          "probability_of_improvement": 1.0
+        }
+      },
+      "zero_trade": {
+        "gross_revenue_eur": 0.0,
+        "net_revenue_eur": 0.0,
+        "degradation_cost_eur": 0.0,
+        "throughput_mwh": 0.0,
+        "equivalent_cycles": 0.0,
+        "interval_max_drawdown_eur": 0.0,
+        "interval_revenue_volatility_eur": 0.0,
+        "interval_cvar_loss_eur": 0.0,
+        "daily_mean_eur": 0.0,
+        "daily_volatility_eur": 0.0,
+        "loss_probability": 0.0,
+        "downside_deviation_eur": 0.0,
+        "daily_var_95_loss_eur": -0.0,
+        "daily_cvar_95_loss_eur": 0.0,
+        "maximum_drawdown_eur": 0.0,
+        "mean_loss_eur": 0.0,
+        "revenue_per_equivalent_cycle_eur": 0.0,
+        "regret_vs_perfect_eur": 7573.492597422113,
+        "paired_ci_vs_reference": {
+          "mean_daily_difference_eur": -135.26001333247268,
+          "ci_lower_eur": -170.74531717751395,
+          "ci_upper_eur": -97.28997610013535,
+          "confidence": 0.95,
+          "block_days": 7,
+          "bootstrap_samples": 2000,
+          "paired_effect_size_dz": -1.644297248339702,
+          "probability_of_improvement": 0.0
+        }
+      }
+    },
+    "paired_comparisons": {
+      "conditional_regime_kumo_vs_kumo_direct": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 11.835749975421345,
+            "ci_lower_eur": 5.626700994784356,
+            "ci_upper_eur": 18.696973359457857,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.5384573234825883,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.6189946349191365,
+            "ci_lower_eur": -0.995836810912246,
+            "ci_upper_eur": 2.264673381012562,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.08875263273002951,
+            "probability_of_improvement": 0.7795
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 11.835749975421345,
+            "ci_lower_eur": 5.448222898496032,
+            "ci_upper_eur": 18.274185407607856,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.5384573234825883,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.6189946349191365,
+            "ci_lower_eur": -1.0755366848284438,
+            "ci_upper_eur": 2.169161481046022,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.08875263273002951,
+            "probability_of_improvement": 0.761
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 11.835749975421345,
+            "ci_lower_eur": 6.012273027172968,
+            "ci_upper_eur": 16.63462095520769,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.5384573234825883,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 0.6189946349191365,
+            "ci_lower_eur": -0.6993687604008986,
+            "ci_upper_eur": 1.850216816178751,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.08875263273002951,
+            "probability_of_improvement": 0.821
+          }
+        }
+      },
+      "conditional_regime_kumo_vs_regime_kumo": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": -1.7692927307241637,
+            "ci_lower_eur": -4.195027731410502,
+            "ci_upper_eur": 0.10787866028625172,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.2916988390476878,
+            "probability_of_improvement": 0.038
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -0.4429474914423423,
+            "ci_lower_eur": -1.547296763926456,
+            "ci_upper_eur": 0.38664686574096757,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.1546195274387255,
+            "probability_of_improvement": 0.2005
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": -1.7692927307241637,
+            "ci_lower_eur": -4.675768550788441,
+            "ci_upper_eur": 0.24619031102505287,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.2916988390476878,
+            "probability_of_improvement": 0.073
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -0.4429474914423423,
+            "ci_lower_eur": -1.5832745085689366,
+            "ci_upper_eur": 0.37747114832468714,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.1546195274387255,
+            "probability_of_improvement": 0.224
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": -1.7692927307241637,
+            "ci_lower_eur": -4.574891454341871,
+            "ci_upper_eur": 0.17698212822984583,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.2916988390476878,
+            "probability_of_improvement": 0.08
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -0.4429474914423423,
+            "ci_lower_eur": -1.3851263180079691,
+            "ci_upper_eur": 0.2723120108332977,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.1546195274387255,
+            "probability_of_improvement": 0.1835
+          }
+        }
+      },
+      "conditional_regime_kumo_vs_linear": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 0.2554102826925922,
+            "ci_lower_eur": -10.34266266384851,
+            "ci_upper_eur": 10.57700035941815,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.007266672910597123,
+            "probability_of_improvement": 0.509
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -1.7080822204267554,
+            "ci_lower_eur": -4.128786312019921,
+            "ci_upper_eur": 0.578169016165101,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.21669848896725696,
+            "probability_of_improvement": 0.0735
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 0.2554102826925922,
+            "ci_lower_eur": -9.241481803510622,
+            "ci_upper_eur": 10.222648545743183,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.007266672910597123,
+            "probability_of_improvement": 0.5165
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -1.7080822204267554,
+            "ci_lower_eur": -3.959578764488782,
+            "ci_upper_eur": 0.35203186734650926,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.21669848896725696,
+            "probability_of_improvement": 0.0605
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 0.2554102826925922,
+            "ci_lower_eur": -8.70518750191506,
+            "ci_upper_eur": 7.787500090106862,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.007266672910597123,
+            "probability_of_improvement": 0.551
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -1.7080822204267554,
+            "ci_lower_eur": -3.417928862421776,
+            "ci_upper_eur": 0.10427998526190373,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.21669848896725696,
+            "probability_of_improvement": 0.034
+          }
+        }
+      },
+      "conditional_regime_kumo_vs_quantile_gbm": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": -3.3960918191877925,
+            "ci_lower_eur": -11.562217606409865,
+            "ci_upper_eur": 3.2280057740907755,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.11658217968862707,
+            "probability_of_improvement": 0.192
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -2.3215028216459674,
+            "ci_lower_eur": -4.909064816445722,
+            "ci_upper_eur": 0.14571512468749337,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.2720853362768591,
+            "probability_of_improvement": 0.032
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": -3.3960918191877925,
+            "ci_lower_eur": -11.148615674258643,
+            "ci_upper_eur": 3.345192651862333,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.11658217968862707,
+            "probability_of_improvement": 0.2095
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -2.3215028216459674,
+            "ci_lower_eur": -4.986037617429306,
+            "ci_upper_eur": 0.28275122523715585,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.2720853362768591,
+            "probability_of_improvement": 0.0405
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": -3.3960918191877925,
+            "ci_lower_eur": -10.74374332621664,
+            "ci_upper_eur": 3.6888017351827354,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.11658217968862707,
+            "probability_of_improvement": 0.197
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": -2.3215028216459674,
+            "ci_lower_eur": -4.8024697529469345,
+            "ci_upper_eur": 0.5376895728788386,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": -0.2720853362768591,
+            "probability_of_improvement": 0.053
+          }
+        }
+      },
+      "regime_kumo_vs_kumo_direct": {
+        "3": {
+          "revenue": {
+            "mean_daily_difference_eur": 13.605042706145513,
+            "ci_lower_eur": 7.876063308359785,
+            "ci_upper_eur": 19.970908456183675,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.6228720479092418,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.061942126361479,
+            "ci_lower_eur": -0.7830966776626543,
+            "ci_upper_eur": 2.907903533518112,
+            "confidence": 0.95,
+            "block_days": 3,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.14154485304034742,
+            "probability_of_improvement": 0.8665
+          }
+        },
+        "7": {
+          "revenue": {
+            "mean_daily_difference_eur": 13.605042706145513,
+            "ci_lower_eur": 8.927887986417982,
+            "ci_upper_eur": 18.981811786211573,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.6228720479092418,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.061942126361479,
+            "ci_lower_eur": -0.9231163608166123,
+            "ci_upper_eur": 2.8455251200582286,
+            "confidence": 0.95,
+            "block_days": 7,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.14154485304034742,
+            "probability_of_improvement": 0.8605
+          }
+        },
+        "14": {
+          "revenue": {
+            "mean_daily_difference_eur": 13.605042706145513,
+            "ci_lower_eur": 9.343558000429407,
+            "ci_upper_eur": 17.48821705213483,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.6228720479092418,
+            "probability_of_improvement": 1.0
+          },
+          "mae_improvement": {
+            "mean_daily_difference_eur": 1.061942126361479,
+            "ci_lower_eur": -0.5787565580700735,
+            "ci_upper_eur": 2.8252972918390555,
+            "confidence": 0.95,
+            "block_days": 14,
+            "bootstrap_samples": 2000,
+            "paired_effect_size_dz": 0.14154485304034742,
+            "probability_of_improvement": 0.8795
+          }
+        }
+      }
+    },
+    "activation_diagnostics": {
+      "activation_frequency": 0.7272727272727273,
+      "mae_true_positive": 17,
+      "mae_false_positive": 15,
+      "mae_missed_opportunity": 6,
+      "revenue_true_positive": 23,
+      "revenue_false_positive": 9,
+      "revenue_missed_opportunity": 9
+    },
+    "regime_summary": {
+      "all": {
+        "origins": 44,
+        "activation_rate": 0.7272727272727273,
+        "always_mae_improvement_eur_mwh": 1.061942126361479,
+        "conditional_mae_improvement_eur_mwh": 0.6189946349191365,
+        "always_revenue_improvement_eur": 13.605042706145513,
+        "conditional_revenue_improvement_eur": 11.835749975421345
+      },
+      "high_volatility": {
+        "origins": 18,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": -0.6757724998035963,
+        "conditional_mae_improvement_eur_mwh": -0.6757724998035963,
+        "always_revenue_improvement_eur": 18.770318566740848,
+        "conditional_revenue_improvement_eur": 18.770318566740848
+      },
+      "negative_price_risk": {
+        "origins": 30,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": 0.9679468602820619,
+        "conditional_mae_improvement_eur_mwh": 0.9679468602820619,
+        "always_revenue_improvement_eur": 15.345040666069702,
+        "conditional_revenue_improvement_eur": 15.345040666069702
+      },
+      "overlap": {
+        "origins": 16,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": -0.6475789452778051,
+        "conditional_mae_improvement_eur_mwh": -0.6475789452778051,
+        "always_revenue_improvement_eur": 17.34024720405544,
+        "conditional_revenue_improvement_eur": 17.34024720405544
+      },
+      "ordinary": {
+        "origins": 12,
+        "activation_rate": 0.0,
+        "always_mae_improvement_eur_mwh": 1.624140801955255,
+        "conditional_mae_improvement_eur_mwh": 0.0,
+        "always_revenue_improvement_eur": 6.487406679321932,
+        "conditional_revenue_improvement_eur": 0.0
+      },
+      "activated": {
+        "origins": 32,
+        "activation_rate": 1.0,
+        "always_mae_improvement_eur_mwh": 0.8511176230138128,
+        "conditional_mae_improvement_eur_mwh": 0.8511176230138128,
+        "always_revenue_improvement_eur": 16.274156216204354,
+        "conditional_revenue_improvement_eur": 16.274156216204354
+      },
+      "weekend": {
+        "origins": 9,
+        "activation_rate": 0.7777777777777778,
+        "always_mae_improvement_eur_mwh": 2.744063179009432,
+        "conditional_mae_improvement_eur_mwh": 2.9577292043889707,
+        "always_revenue_improvement_eur": 6.226483761060213,
+        "conditional_revenue_improvement_eur": 8.393201743516354
+      },
+      "weekday": {
+        "origins": 35,
+        "activation_rate": 0.7142857142857143,
+        "always_mae_improvement_eur_mwh": 0.6293967128234338,
+        "conditional_mae_improvement_eur_mwh": 0.017605745626893158,
+        "always_revenue_improvement_eur": 15.502386434881727,
+        "conditional_revenue_improvement_eur": 12.720976663625486
+      }
+    },
+    "physical_verification": {
+      "simultaneous_charge_discharge_intervals": 0,
+      "max_shared_inverter_excess_mw": 1.3322676295501878e-15,
+      "max_soc_below_minimum_mwh": 0.0,
+      "max_soc_above_maximum_mwh": 0.0,
+      "maximum_daily_efc": 1.5,
+      "configured_daily_efc_limit": 1.5
+    }
+  },
+  "decision": {
+    "conditional_policy_supported": false,
+    "rule": "primary revenue CI positive versus direct and always-on retrieval",
+    "recommendation": "retain_conventional_models"
+  },
+  "runtime": {
+    "archive_load_seconds": 0.0630258999990474,
+    "archive_key": "a5f7b2fc1d5bfc623132f2b9ca3c168cafcf7aaf3dcc8a617594bb0169ba4c01",
+    "kumo_direct_total_seconds": 103.42840310000429,
+    "optimized_retrieval_all_origins_seconds": 3.4225702000221645,
+    "conditional_operational_retrieval_seconds": 2.0030739000067115,
+    "baseline_seconds": 140.77035980000073,
+    "mean_retrieval_seconds": 0.030288231858603226,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pytorch_device": "cpu"
+  }
+}

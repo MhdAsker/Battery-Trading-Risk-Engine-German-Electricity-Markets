@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from bess_trading.config import load_yaml
 from bess_trading.forecasting.kumo.policy import ConditionalRetrievalPolicy
 from bess_trading.forecasting.kumo.regimes import RegimeSnapshot, RegimeThresholds
 from bess_trading.forecasting.kumo.retrieval import (
@@ -68,3 +69,13 @@ def test_conditional_policy_uses_only_snapshot_labels() -> None:
     decision = policy.decide(risky)
     assert decision.activate is True
     assert decision.reasons == ("negative_price_risk",)
+
+
+def test_conditional_study_contract_disables_native_darr_and_fine_tuning() -> None:
+    settings = load_yaml("configs/kumo_conditional_research.yaml")
+    assert settings["native_darr"]["enabled"] is False
+    assert settings["fine_tuning"]["enabled"] is False
+    assert settings["conditional_policy"]["fallback"] == "kumo_direct"
+    assert settings["experiment"]["expected_development_origins"] == 69
+    assert settings["experiment"]["expected_validation_origins"] == 44
+    assert settings["experiment"]["output"] == "results/kumo_conditional_113"

@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB)](https://www.python.org/)
 [![Release](https://img.shields.io/badge/release-v0.3.0-blue)](https://github.com/MhdAsker/Battery-Trading-Risk-Engine-German-Electricity-Markets/releases/tag/v0.3.0)
-![Tests](https://img.shields.io/badge/tests-56%20passing-success)
+![Tests](https://img.shields.io/badge/tests-60%20passing-success)
 ![Coverage](https://img.shields.io/badge/coverage-81%25-success)
 ![Market](https://img.shields.io/badge/market-Germany--Luxembourg-orange)
 ![Resolution](https://img.shields.io/badge/engine-15%20minute-purple)
@@ -82,19 +82,20 @@ experiment. The adapter preserves the 11:00 Europe/Berlin issue time, physical D
 days, continuous strategy-specific SOC, degradation accounting, and the existing deterministic
 and stochastic optimizers.
 
-The official direct checkpoint has passed real CPU inference. A pre-registered 24-origin 2023
-development benchmark finds that external regime retrieval improves Kumo's point estimates
-(MAE 21.31 vs 23.43 EUR/MWh; net revenue EUR 2,882.56 vs EUR 2,566.17). However, the paired 95%
-intervals for both MAE and revenue improvement cross zero, learned frozen baselines remain more
-accurate, and both Kumo methods miss all observed negative-price hours. The evidence therefore
-does not justify fine-tuning or native DARR. Neither has been empirically evaluated.
+The official direct checkpoint has passed real CPU inference. The latest pre-registered study
+uses 69 eligible 2023 policy-development origins and 44 subsequent 2024 retrospective-validation
+origins. Conditional retrieval improves validation revenue over direct Kumo by EUR 11.84/day
+(95% interval EUR 5.45 to EUR 18.27) but is worse than always-on retrieval by EUR 1.77/day, while
+Quantile GBM retains the lowest MAE and highest revenue. The fixed conditional hypothesis is not
+supported; fine-tuning and native DARR remain unevaluated and are not recommended from this
+evidence.
 
-![Expanded Kumo development benchmark](docs/assets/kumo_expanded_summary.png)
+![Conditional Kumo validation](docs/assets/kumo_conditional_validation_summary.png)
 
 See the [full Kumo research report](docs/KUMO_RESEARCH_REPORT.md), the
 [implementation plan](docs/KUMO_IMPLEMENTATION_PLAN.md), and
-[`configs/kumo_research.yaml`](configs/kumo_research.yaml) for evidence boundaries and exact
-reproduction commands.
+[conditional-study pre-registration](docs/KUMO_CONDITIONAL_PREREGISTRATION.md). The frozen
+execution contract is [`configs/kumo_conditional_research.yaml`](configs/kumo_conditional_research.yaml).
 
 ## Research contributions
 

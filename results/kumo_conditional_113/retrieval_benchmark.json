@@ -1,0 +1,14 @@
+{
+  "benchmark_dates": ["2023-05-30", "2023-10-29", "2023-11-07"],
+  "reference_seconds": [39.1117267, 27.9817377, 42.9676628],
+  "optimized_seconds": [0.0290452, 0.0243383, 0.0258358],
+  "speedup_factors": [1346.58, 1149.70, 1663.11],
+  "cold_archive_build_seconds": 1.5305588,
+  "warm_archive_load_seconds": 0.0630259,
+  "archive_candidates": 863,
+  "maximum_forecast_absolute_difference_eur_mwh": 1.0125233984581428e-13,
+  "maximum_weight_absolute_difference": 5.551115123125783e-16,
+  "neighbor_lists_identical": true,
+  "regime_filter_decisions_identical": true,
+  "hardware": "Windows 11, CPU-only PyTorch, Intel64 Family 6 Model 154, 15.71 GB RAM"
+}
