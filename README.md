@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB)](https://www.python.org/)
 [![Release](https://img.shields.io/badge/release-v0.3.0-blue)](https://github.com/MhdAsker/Battery-Trading-Risk-Engine-German-Electricity-Markets/releases/tag/v0.3.0)
-![Tests](https://img.shields.io/badge/tests-43%20passing-success)
+![Tests](https://img.shields.io/badge/tests-56%20passing-success)
 ![Coverage](https://img.shields.io/badge/coverage-81%25-success)
 ![Market](https://img.shields.io/badge/market-Germany--Luxembourg-orange)
 ![Resolution](https://img.shields.io/badge/engine-15%20minute-purple)
@@ -82,13 +82,14 @@ experiment. The adapter preserves the 11:00 Europe/Berlin issue time, physical D
 days, continuous strategy-specific SOC, degradation accounting, and the existing deterministic
 and stochastic optimizers.
 
-The official direct checkpoint has passed a real CPU smoke test. A four-day 2023 development
-diagnostic found directional improvement from the external regime blend (MAE 34.16 vs 35.11
-EUR/MWh; net revenue EUR 788.09 vs EUR 746.00), but the sample is deliberately below the
-20-day research gate. These values are not a superiority claim, and native DARR has not yet
-been benchmarked on the CPU-only host.
+The official direct checkpoint has passed real CPU inference. A pre-registered 24-origin 2023
+development benchmark finds that external regime retrieval improves Kumo's point estimates
+(MAE 21.31 vs 23.43 EUR/MWh; net revenue EUR 2,882.56 vs EUR 2,566.17). However, the paired 95%
+intervals for both MAE and revenue improvement cross zero, learned frozen baselines remain more
+accurate, and both Kumo methods miss all observed negative-price hours. The evidence therefore
+does not justify fine-tuning or native DARR. Neither has been empirically evaluated.
 
-![Kumo development diagnostic](docs/assets/kumo_development_summary.png)
+![Expanded Kumo development benchmark](docs/assets/kumo_expanded_summary.png)
 
 See the [full Kumo research report](docs/KUMO_RESEARCH_REPORT.md), the
 [implementation plan](docs/KUMO_IMPLEMENTATION_PLAN.md), and

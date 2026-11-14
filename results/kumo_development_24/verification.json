@@ -1,0 +1,23 @@
+{
+  "constraint_verification": {
+    "dispatch_rows": 4616,
+    "simultaneous_charge_discharge_intervals": 0,
+    "max_shared_inverter_excess_mw": 1.9984014443252818e-15,
+    "max_soc_below_minimum_mwh": 0.0,
+    "max_soc_above_maximum_mwh": 0.0,
+    "maximum_daily_equivalent_cycles": 1.5000000000000002,
+    "configured_daily_cycle_limit": 1.5,
+    "result": "pass_with_solver_tolerance"
+  },
+  "selection_audit": {
+    "candidate_2023_delivery_days": 365,
+    "eligible_days": 69,
+    "excluded_path_exceeds_512_steps": 223,
+    "excluded_latest_168_hour_context_gap": 66,
+    "excluded_incomplete_settlement": 7,
+    "selected_days": 24
+  },
+  "state_policy": "Each strategy has an independent SOC state. SOC is carried between selected origins and held unchanged across non-evaluated calendar gaps.",
+  "native_darr_evaluated": false,
+  "fine_tuning_evaluated": false
+}

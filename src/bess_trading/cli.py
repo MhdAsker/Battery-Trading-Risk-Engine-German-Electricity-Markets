@@ -37,6 +37,10 @@ def main() -> None:
         "run-kumo-diagnostic", help="Run the pre-test Kumo research feasibility diagnostic"
     )
     run_kumo.add_argument("--config", default="configs/kumo_research.yaml")
+    run_kumo_expanded = sub.add_parser(
+        "run-kumo-expanded", help="Run the frozen 24-origin Kumo development benchmark"
+    )
+    run_kumo_expanded.add_argument("--config", default="configs/kumo_development_24.yaml")
     args = parser.parse_args()
     logging.basicConfig(
         level=args.log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
@@ -86,6 +90,13 @@ def main() -> None:
         logging.getLogger(__name__).info(
             "Kumo development gate: %s",
             result["research_feasibility_gate"]["proceed_to_full_development"],
+        )
+    elif args.command == "run-kumo-expanded":
+        from bess_trading.experiments.kumo_expanded_benchmark import run
+
+        result = run(args.config)
+        logging.getLogger(__name__).info(
+            "Expanded Kumo research gate: %s", result["research_gate"]["decision"]
         )
 
 

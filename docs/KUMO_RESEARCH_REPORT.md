@@ -2,22 +2,29 @@
 
 ## Executive conclusion
 
-This branch integrates NVIDIA Kumo Forecast into the existing causal German day-ahead
-battery experiment without changing the battery model, settlement accounting, or frozen
-Phase 1/2 evidence. Official Kumo direct inference works on the available CPU environment.
-The first four-day, pre-test diagnostic provides **directional but insufficient** evidence that
-an external electricity-regime retrieval blend may improve both price forecasts and dispatch
-value. It does not establish statistical or trading superiority.
+This branch integrates NVIDIA Kumo Forecast into the existing causal German day-ahead battery
+experiment without changing the battery model, settlement accounting, or frozen Phase 1/2
+evidence. A panel of 24 development origins was frozen in commit `5ca05f0` before expanded
+inference. Every Kumo forecast in the expanded study comes from the official checkpoint.
 
-The central research question therefore remains open. Native DARR has been integrated and
-causality-tested through the official API, but an official-checkpoint DARR benchmark has not
-been launched because archive embedding is computationally expensive on this CPU-only setup.
-The scientific gate correctly stops the full study until at least 20 development days are
-available and the native-DARR compute budget is justified.
+External regime retrieval improves the point estimates relative to Kumo Direct: MAE falls from
+23.43 to 21.31 EUR/MWh and degradation-adjusted net revenue rises by EUR 316.39, or EUR
+13.18/day. The paired 95% block-bootstrap intervals nevertheless cross zero for both daily MAE
+improvement (-2.89 to +6.16 EUR/MWh) and daily revenue improvement (-EUR 0.65 to +EUR 24.84).
+Quantile GBM (17.40 EUR/MWh) and regularized linear regression (19.82 EUR/MWh) also remain more
+accurate than both Kumo methods on identical dates.
+
+The expanded evidence therefore **does not justify proceeding to fine-tuning or native DARR**.
+Retrieval is promising specifically in issue-time high-volatility and negative-price-risk
+contexts, but it is unstable in ordinary contexts, misses actual negative prices, worsens some
+days materially, and costs substantially more compute. Native DARR remains integrated but has
+not been evaluated; fine-tuning has not been performed.
 
 ![Four development forecast cases](assets/kumo_development_forecasts.png)
 
 ![Preliminary forecast and decision summary](assets/kumo_development_summary.png)
+
+![Expanded benchmark summary](assets/kumo_expanded_summary.png)
 
 ## Scope and evidence status
 
@@ -146,14 +153,116 @@ Although the four-day paired bootstrap happens to give a positive interval for t
 blend, inference from four selected days is not defensible. The gate requires at least 20
 development days; its current decision is `insufficient_evidence`. No 2024 results were used.
 
+## Frozen 24-origin development benchmark
+
+The expanded panel was frozen before new inference in commit `5ca05f0`. It includes dates from
+May through December 2023, weekdays and weekends, the 25-hour autumn DST day, and issue-time
+ordinary, negative-price-risk and high-volatility strata. The selection manifest is
+`configs/kumo_development_origins_v1.csv`; its criteria are documented in
+`docs/KUMO_DEVELOPMENT_SELECTION.md`.
+
+Selection used only information available at the 11:00 Europe/Berlin issue time. It did not use
+delivery-day price levels, negative-price outcomes, spreads, model errors, or battery revenue.
+Of 365 candidate 2023 days, 223 required more than the verified 512 forecast steps from the
+latest complete 512-hour context, 66 had a gap in the latest 168-hour retrieval context, and 7
+had incomplete settlement curves. Sixty-nine days were eligible and 24 were stratified and
+frozen. This strict policy creates calendar-selection bias and leaves only one winter origin.
+
+The regularized-linear and Quantile-GBM comparisons use the unchanged Phase 1 model classes,
+365-day causal training windows, seven-day refits, and 100 boosting iterations. They were
+recomputed on the selected timestamps because the frozen 2024 artifacts do not contain 2023
+predictions; no reference implementation or hyperparameter was changed for Kumo.
+
+### Forecast results
+
+| Forecast | MAE (EUR/MWh) | RMSE (EUR/MWh) | Rank correlation | Bottom-hour overlap | Top-hour overlap |
+|---|---:|---:|---:|---:|---:|
+| Persistence | 25.61 | 36.89 | 0.763 | 0.615 | 0.615 |
+| Hour of week | 30.71 | 39.40 | 0.734 | 0.521 | 0.594 |
+| Regularized linear | 19.82 | 25.90 | 0.819 | 0.667 | 0.708 |
+| Quantile GBM P50 | **17.40** | **24.80** | 0.799 | 0.594 | 0.667 |
+| Kumo Direct | 23.43 | 30.59 | 0.722 | 0.615 | 0.594 |
+| Kumo + external regime retrieval | 21.31 | 27.01 | **0.810** | **0.698** | **0.750** |
+
+Retrieval reduces aggregate MAE by 2.11 EUR/MWh and RMSE by 3.58 EUR/MWh relative to direct
+Kumo. It also improves price ranking and economically relevant top/bottom-hour selection. Its
+mean spread absolute error is slightly worse, however: 36.36 versus 35.42 EUR/MWh.
+
+The panel contains 16 actual negative-price hours across three delivery days. Kumo Direct and
+regime Kumo predict none of them, giving zero recall. Quantile GBM negative-price F1 is 0.50,
+linear F1 is 0.47, and persistence F1 is 0.17. The pre-2024 99th-percentile spike threshold is
+530.49 EUR/MWh, and the selected panel contains no hours above it. All reported spike scores are
+therefore uninformative zeros, not evidence of successful spike prediction.
+
+Daily paired MAE improvement averages 2.08 EUR/MWh, but its 95% seven-origin circular
+block-bootstrap interval is -2.89 to +6.16 EUR/MWh; paired effect size is 0.21. Because origins
+are discontinuous, a block is seven ordered origins rather than seven consecutive calendar
+days. The interval crosses zero and the 24 selected days are still a modest, non-random sample.
+
+### Battery decision value
+
+| Strategy | Net revenue (EUR) | Throughput (MWh) | EFC | Degradation (EUR) | Revenue/EFC (EUR) |
+|---|---:|---:|---:|---:|---:|
+| Persistence | 2,722.64 | 119.02 | 29.75 | 595.08 | 91.51 |
+| Hour of week | 2,512.24 | 121.20 | 30.30 | 606.00 | 82.91 |
+| Regularized linear | 2,731.95 | 115.11 | 28.78 | 575.57 | **94.93** |
+| Quantile GBM P50 | 2,703.88 | 116.80 | 29.20 | 584.01 | 92.60 |
+| Kumo Direct | 2,566.17 | 124.76 | 31.19 | 623.79 | 82.28 |
+| Kumo + external regime retrieval | **2,882.56** | 126.33 | 31.58 | 631.66 | 91.27 |
+| Perfect foresight upper bound | 3,398.67 | 116.34 | 29.08 | 581.69 | 116.85 |
+
+Regime Kumo is the highest-revenue non-perfect strategy on this panel and earns EUR 316.39 more
+than Kumo Direct. It also cycles slightly more rather than merely avoiding low-value cycles.
+Mean paired revenue improvement is EUR 13.18/day, with a 95% block-bootstrap interval of
+-EUR 0.65 to +EUR 24.84/day, effect size 0.53, and bootstrap probability of improvement 96.85%.
+Because the interval crosses zero, superiority is not statistically established.
+
+Every strategy maintains an independent SOC state. SOC is carried between selected origins and
+held unchanged across non-evaluated calendar gaps. Independent simulation finds zero
+simultaneous charge/discharge intervals, no SOC-bound violation, shared-inverter excess below
+2e-15 MW, and maximum daily cycling of 1.5000000000000002 EFC against the 1.5-EFC limit (solver
+tolerance). This is a selected-origin comparison, not a claim that the asset traded on omitted
+calendar days.
+
+Downside is not uniformly better. Both Kumo strategies lose money on one of 24 days. Daily 95%
+CVaR loss is -EUR 2.67 for direct Kumo (the empirical tail remains profitable under the sign
+convention) versus +EUR 0.65 for regime Kumo, and maximum drawdown worsens from -EUR 22.03 to
+-EUR 28.67. The retrieval strategy therefore raises mean return while slightly worsening the
+observed downside and degradation bill.
+
+### Where retrieval helps and hurts
+
+![Daily retrieval differences](assets/kumo_expanded_daily_differences.png)
+
+| Forecast-time condition | Days | Mean MAE improvement | Mean revenue improvement | MAE wins | Revenue wins |
+|---|---:|---:|---:|---:|---:|
+| Negative-price risk | 14 | +4.57 EUR/MWh | +EUR 21.01/day | 11/14 | 13/14 |
+| High volatility | 6 | +8.11 EUR/MWh | +EUR 29.25/day | 6/6 | 6/6 |
+| Ordinary (neither label) | 10 | **-1.40 EUR/MWh** | +EUR 2.23/day | 5/10 | 4/10 |
+| Weekend | 8 | +2.71 EUR/MWh | +EUR 13.36/day | 5/8 | 6/8 |
+| Weekday | 16 | +1.77 EUR/MWh | +EUR 13.10/day | 11/16 | 11/16 |
+
+Benefits concentrate in regimes identified before delivery. All six high-volatility origins
+improve on both MAE and revenue. Conversely, retrieval worsens mean MAE in ordinary contexts
+and improves revenue on only four of ten such days. The worst revenue failure is 2023-11-07
+(-EUR 54.45 versus direct Kumo, with MAE worse by 10.60 EUR/MWh). The largest MAE failure is
+2023-11-15 (-18.65 EUR/MWh). Strong successes include 2023-05-30 (+EUR 64.22 and +14.61
+EUR/MWh MAE improvement) and 2023-08-28 (+EUR 70.41).
+
+![Retrieval success and failure cases](assets/kumo_expanded_cases.png)
+
 ## Compute and feasibility
 
 The host reports a GTX 1650 with 4 GB VRAM, but the installed compatible PyTorch build is CPU
-only (`torch 2.15.0+cpu`, CUDA unavailable). Cold start, including official downloads and model
-loading, took 261.6 seconds. After model caching, measured per-origin direct inference was about
-0.31-0.32 seconds; one process-start measurement was 20.19 seconds. External retrieval currently
-takes tens of seconds per origin because it constructs an auditable chronological archive in
-Python; this is a clear optimization target.
+only (`torch 2.15.0+cpu`, CUDA unavailable). It has 15.71 GB system RAM. The expanded process
+used approximately 2.06 GB resident memory at completion.
+
+Across 24 origins, measured Kumo Direct time is 35.48 seconds including an 18.78-second initial
+model load; median per-origin time is 0.34 seconds. Longer autoregressive horizons increase
+inference to roughly 1-2 seconds. External regime retrieval takes 950.59 seconds in total,
+39.61 seconds per origin, because it reconstructs and audits the chronological archive. The
+unchanged linear and Quantile-GBM baseline run takes 60.75 seconds. Retrieval is therefore the
+dominant cost and needs archive caching/vectorization before larger evaluation.
 
 Native DARR embeds a historical archive for each causal information vintage and does not expose
 neighbor identities through the public result. Given CPU-only execution and the prior warning
@@ -162,12 +271,12 @@ status, not evidence that DARR fails.
 
 ## Probabilistic and stochastic status
 
-The calibration and coherent-scenario adapters are implemented and tested, but four origins
-are insufficient to estimate stable regime-conditioned residual distributions. Consequently,
-this branch does not publish Kumo P10/P50/P90 coverage, WIS/CRPS, PIT diagnostics, or Kumo CVaR
-revenue. Doing so would fabricate precision. After a larger development run, calibration must
-use only earlier residuals, sparse regimes must fall back to global residuals, and configuration
-must be frozen before the retrospective 2024 replication.
+The calibration and coherent-scenario adapters are implemented and tested, but 24 discontinuous
+selected origins are still not an appropriate chronological residual-calibration stream.
+Consequently, this branch does not publish Kumo P10/P50/P90 coverage, WIS/CRPS, PIT diagnostics,
+or Kumo CVaR revenue. Calibration requires a denser chronological development sequence, using
+only earlier residuals and global fallback for sparse regimes, followed by another configuration
+freeze before any retrospective 2024 replication.
 
 ## Reproduction
 
@@ -184,6 +293,8 @@ pytest tests/test_kumo_forecasting.py tests/test_kumo_retrieval.py \
   tests/test_kumo_causality.py tests/test_kumo_dispatch.py -q
 bess-research run-kumo-diagnostic --config configs/kumo_research.yaml
 python scripts/plot_kumo_diagnostic.py
+bess-research run-kumo-expanded --config configs/kumo_development_24.yaml
+python scripts/plot_kumo_expanded.py
 ```
 
 Outputs are isolated under `results/kumo_development_diagnostic/` and cache entries under
@@ -191,27 +302,32 @@ Outputs are isolated under `results/kumo_development_diagnostic/` and cache entr
 
 ## Direct answers to the research questions
 
-- **RQ1:** unresolved. Kumo direct beats the two simple baselines on MAE across four selected
-  dates but not persistence on realized revenue. Existing learned Phase 2 models have not yet
-  been rerun on a sufficiently large identical-date development set.
+- **RQ1:** Kumo Direct beats persistence and hour-of-week on MAE but is worse than regularized
+  linear and Quantile GBM on the same 24 dates. It also earns less net revenue than persistence,
+  linear and Quantile GBM. Direct Kumo superiority is not supported.
 - **RQ2:** unresolved. Official native DARR is integrated but not empirically executed through
   the development gate on the CPU-only host.
-- **RQ3:** promising but unproven. External regime retrieval improves level error and net
-  revenue versus direct Kumo in four dates, while worsening rank and spread metrics.
-- **RQ4:** unsupported. Negative-price recall is zero and the event sample is too small.
-- **RQ5:** unsupported as a general conclusion. The four-day blend earns more than direct Kumo,
-  but persistence earns more than direct Kumo and sample uncertainty dominates.
+- **RQ3:** promising but not statistically established. External retrieval improves aggregate
+  error, ranking and revenue versus direct Kumo, but both paired confidence intervals cross zero.
+- **RQ4:** regime-dependent. Retrieval helps strongly in pre-issue high-volatility and
+  negative-price-risk contexts, but neither Kumo method predicts any of 16 negative-price hours,
+  and the panel contains no qualifying scarcity-spike hour.
+- **RQ5:** not established. Regime Kumo earns more net revenue than all non-perfect strategies
+  on this panel, but its paired interval versus direct Kumo crosses zero, it cycles more, and its
+  observed downside is slightly worse.
 - **RQ6:** unresolved. Coherent scenario infrastructure exists; adequate leakage-safe Kumo
   residual history does not yet exist.
-- **RQ7:** unresolved. Direct cached inference is practical on CPU; auditable retrieval is much
-  slower and has not yet demonstrated benefit sufficient to justify a full DARR grid.
+- **RQ7:** direct cached inference is practical on CPU. External retrieval is about 40 seconds
+  per origin and its uncertain average benefit does not yet justify a native-DARR grid or
+  fine-tuning campaign.
 
 ## Recommended next action
 
-Repair or pre-register causal treatment of isolated source gaps, then run 20-30 chronologically
-spaced 2023 development origins with frozen direct and external-retrieval settings. Profile one
-official native-DARR origin with a capped archive and record RAM/time before authorizing more.
-Only if economic ranking and revenue evidence survives that gate should the project fit Kumo
-residual calibration, freeze all settings, and perform the retrospective 2024 decision-value
-comparison. A newer authoritative year should be reserved for a genuinely prospective shadow
-evaluation.
+Do **not** begin fine-tuning or a native-DARR parameter grid from this evidence. First optimize
+and cache the external retrieval archive without changing its mathematical output, pre-register
+a denser chronological development panel or obtain gap-corrected authoritative data, and test a
+gated retrieval policy that activates only in forecast-time high-volatility/negative-risk
+conditions. That policy must be chosen and frozen on development evidence. Only if its paired
+revenue and forecast intervals exclude zero should one profile a single capped native-DARR
+origin and consider fine-tuning. A newer authoritative year should remain reserved for a
+prospective shadow evaluation.
