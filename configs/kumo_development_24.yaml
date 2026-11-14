@@ -1,0 +1,98 @@
+seed: 42
+
+experiment:
+  inputs:
+    - data/raw/entsoe_prices_20200101_20210101.parquet
+    - data/raw/entsoe_prices_20210101_20220101.parquet
+    - data/raw/entsoe_prices_20220101_20230101.parquet
+    - data/raw/entsoe_prices_2023.parquet
+    - data/raw/entsoe_prices_2024.parquet
+  # Frozen before expanded inference. Selection uses issue-time features only; see
+  # docs/KUMO_DEVELOPMENT_SELECTION.md and configs/kumo_development_origins_v1.csv.
+  development_dates:
+    - "2023-05-08"
+    - "2023-05-14"
+    - "2023-05-18"
+    - "2023-05-22"
+    - "2023-05-27"
+    - "2023-05-30"
+    - "2023-06-01"
+    - "2023-06-11"
+    - "2023-06-14"
+    - "2023-08-05"
+    - "2023-08-10"
+    - "2023-08-27"
+    - "2023-08-28"
+    - "2023-09-28"
+    - "2023-09-29"
+    - "2023-09-30"
+    - "2023-10-09"
+    - "2023-10-24"
+    - "2023-10-29"
+    - "2023-10-31"
+    - "2023-11-04"
+    - "2023-11-07"
+    - "2023-11-15"
+    - "2023-12-08"
+  retrospective_test_start: "2024-01-01T00:00:00Z"
+  spike_quantile: 0.99
+  bootstrap_samples: 2000
+  minimum_gate_days: 20
+  cache_dir: artifacts/kumo_cache
+  output: results/kumo_development_24
+
+kumo:
+  seq_len: 512
+  model_horizon: 72
+  checkpoint: run8_best_model_cr.pt
+  standardizer: standardizer.pkl
+  model_name: AutonLab/MOMENT-1-large
+  use_cross_channel: true
+  device: null
+  seed: 42
+  batch_size: 1
+  num_workers: 0
+  alpha: 0.20
+  k: 16
+  temperature: 0.05
+  context_stride: 24
+  local_files_only: true
+
+native_darr:
+  enabled: false
+
+external_retrieval:
+  context_hours: 168
+  k: 10
+  temperature: 0.10
+  minimum_regime_neighbors: 3
+  direct_weight: 0.50
+  thresholds:
+    negative_price_share: 0.02
+    volatility_eur_mwh: 20.0
+    residual_load_mw: null
+    renewable_share: null
+
+frozen_baselines:
+  enabled: true
+  train_days: 365
+  retrain_days: 7
+  issue_hour_local: 11
+  model_max_iter: 100
+
+battery:
+  power_mw: 1.0
+  energy_mwh: 2.0
+  min_soc_fraction: 0.10
+  max_soc_fraction: 0.90
+  initial_soc_fraction: 0.50
+  charge_efficiency: 0.95
+  discharge_efficiency: 0.95
+  degradation_cost_eur_per_mwh: 5.0
+  max_equivalent_cycles_per_day: 1.5
+
+optimization:
+  terminal_value_eur_per_mwh: 50.0
+  risk_aversion: 0.20
+  cvar_alpha: 0.95
+  solver: HIGHS
